@@ -29,5 +29,5 @@ window.addEventListener("load", function(e) {
   window.addEventListener("keyup", keyDownUp);
   // window.addEventListener("resize", resize);
   //display.resize()
-  engine.start();
+  engine.run();
 });

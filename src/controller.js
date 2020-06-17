@@ -1,7 +1,7 @@
 const Controller = function() {
-  this.left = new Controller.ButtonInput();
-  this.right = new Controller.ButtonInput();
-  this.up = new Controller.ButtonInput();
+  this.left = new ButtonInput();
+  this.right = new ButtonInput();
+  this.up = new ButtonInput();
 
   this.keyDownUp = function(type, key_code) {
     var down = (type == "keydown") ? true:false
@@ -14,6 +14,10 @@ const Controller = function() {
   };
 };
 
-Controller.prototype = {
-
+const ButtonInput = function() {
+    this.ButtonInput = function() {
+      this.getInput = function(down) {
+        return down;
+    };
+  };
 }
