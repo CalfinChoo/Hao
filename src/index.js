@@ -18,11 +18,12 @@ window.addEventListener("load", function(e) {
   var update = function() {
     game.update();
   };
+  var time_step = 1000/30;
 
   var controller = new Controller();
   var display = new Display(document.querySelector("canvas"));
-  var game = new Game(controller);
-  var engine = new Engine(1000/30, render, update, game);
+  var game = new Game(controller, time_step);
+  var engine = new Engine(time_step, render, update, game);
 
   //eventlisteners for controller and perhaps resize
   window.addEventListener("keydown", keyDownUp);
