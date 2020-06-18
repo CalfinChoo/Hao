@@ -33,7 +33,7 @@ const Engine = function(time_step, update, render) {
         this.updated = false;
         this.render();
       }
-      // window.requestAnimationFrame(this.handleRun.bind(this));
+      window.requestAnimationFrame(this.handleRun.bind(this));
       // if (this.accumulated_time > ) {
       //   console.log("heyo");
       //   window.requestAnimationFrame(this.handleRun.bind(this));
