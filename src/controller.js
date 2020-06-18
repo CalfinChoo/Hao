@@ -15,9 +15,8 @@ const Controller = function() {
 };
 
 const ButtonInput = function() {
-    this.ButtonInput = function() {
-      this.getInput = function(down) {
-        return down;
-    };
+    this.input = false;
+    this.getInput = function(down) {
+      this.input = down;
   };
 }

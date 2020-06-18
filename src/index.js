@@ -12,8 +12,8 @@ window.addEventListener("load", function(e) {
   var keyDownUp = function(e) {
     controller.keyDownUp(e.type, e.keyCode);
   };
-  var render = function() {
-    display.render();
+  var render = function(game) {
+    display.render(game);
   };
   var update = function() {
     game.update();
@@ -21,7 +21,7 @@ window.addEventListener("load", function(e) {
 
   var controller = new Controller();
   var display = new Display(document.querySelector("canvas"));
-  var game = new Game();
+  var game = new Game(controller);
   var engine = new Engine(1000/30, render, update);
 
   //eventlisteners for controller and perhaps resize

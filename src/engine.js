@@ -14,24 +14,24 @@ const Engine = function(time_step, update, render) {
     this.handleRun = function(time_stamp) {
       this.accumulated_time += time_stamp - this.time;
       this.time = time_stamp;
-      console.log(this);
+      // console.log(this);
 
       if (this.accumulated_time >= this.time_step * 3) {
-        console.log("hey");
+        // console.log("hey");
         this.accumulated_time = this.time_step;
       }
 
       while(this.accumulated_time >= this.time_step) {
-        console.log("wow");
+        // console.log("wow");
         this.accumulated_time -= this.time_step;
-        // this.update(time_stamp);
+        this.update();
         this.updated = true;
       }
 
       if (this.updated) {
-        console.log("up");
+        // console.log("up");
         this.updated = false;
-        // this.render(time_stamp);
+        this.render();
       }
       // window.requestAnimationFrame(this.handleRun.bind(this));
       // if (this.accumulated_time > ) {
