@@ -19,21 +19,18 @@ const Game = function(controller, time_step) {
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
 
-    if (this.isLeft) {this.player.x -= 10;}
-    if (this.isRight) {this.player.x += 10;}
+    if (this.isLeft) {this.player.x -= 15;}
+    if (this.isRight) {this.player.x += 15;}
 
     ///////////////////////////
     /// Player acceleration ///
     ///////////////////////////
-    // if (this.count % 30 == 0) this.count = 0;
-    // this.count += 1;
-
     if (this.player.y >= this.groundLevel) this.player.onGround = true;
     else this.player.onGround = false;
     if (this.player.onGround) {
       if (this.isUp) {
         this.counterOn = true;
-        this.player.yVel = -175;
+        this.player.yVel = -200;
         this.count = 0;
       }
       else {
