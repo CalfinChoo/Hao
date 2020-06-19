@@ -1,7 +1,7 @@
 const Game = function(controller, time_step) {
   this.mode = 0;
+
   this.level = test;
-  console.log(this.level);
   this.time_step = time_step;
   this.worldYAccel = 98.1;
 
@@ -10,11 +10,35 @@ const Game = function(controller, time_step) {
   this.isRight = this.controller.right.input;
   this.isUp = this.controller.up.input;
 
-  this.player = new Player(3, [], 50, 50, this.level);
+  this.initializePlayerSprites = function() {
+    var dict = new Object();
+    /////////////
+    // Walking //
+    /////////////
+    var img = new Image();
+    img.src = "assets/walk.png"
+    dict['walk'] = img;
+    //////////
+    // Idle //
+    //////////
+    img = new Image();
+    img.src = "assets/idle.png"
+    dict['idle'] = img;
+    /////////////
+    // Jumping //
+    /////////////
+    img = new Image();
+    img.src = "assets/jump.png"
+    dict['jump'] = img;
+    // console.log(dict);
+    return dict;
+  };
+  this.player = new Player(3, this.initializePlayerSprites(), 50, 50, this.level);
 
-  this.count = 0;
-  this.counterOn = false;
+  this.tickCount = 0;
+  this.tickCounterOn = false;
   this.groundLevel = 500;
+
   this.update = function() {
     this.isLeft = this.controller.left.input;
     this.isRight = this.controller.right.input;
@@ -27,44 +51,64 @@ const Game = function(controller, time_step) {
     /// Player acceleration ///
     ///////////////////////////
     this.groundLevel = this.player.detectGroundLevel();
-    // console.log(this.groundLevel);
     if (this.player.y >= this.groundLevel) this.player.onGround = true;
     else this.player.onGround = false;
     if (this.player.onGround) {
       if (this.isUp) {
-        this.counterOn = true;
+        this.tickCounterOn = true;
         this.player.yVel = -200;
-        this.count = 0;
+        this.tickCount = 0;
       }
       else {
-        this.counterOn = false;
-        this.count = 0;
+        this.tickCounterOn = false;
+        this.tickCount = 0;
         this.player.yVel = 0;
       }
     }
     else {
-      this.counterOn = true;
-      this.player.yVel += this.worldYAccel * (this.count / this.time_step);
+      this.tickCounterOn = true;
+      this.player.yVel += this.worldYAccel * (this.tickCount / this.time_step);
     }
-    if (this.counterOn) this.count += 1;
-    else this.count = 0;
+    if (this.tickCounterOn) this.tickCount += 1;
+    else this.tickCount = 0;
 
-    // console.log(this.count);
-    if (this.player.y + this.player.yVel * (this.count / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
-    else this.player.y += this.player.yVel * (this.count / this.time_step);
+    if (this.player.y + this.player.yVel * (this.tickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
+    else this.player.y += this.player.yVel * (this.tickCount / this.time_step);
   };
 };
 
 const Player = function(health, sprites, x, y, level) {
   this.maxHealth = health;
   this.currentHealth = health;
-  this.sprites = sprites;
   this.x = x;
   this.y = y;
   this.onGround = false;
   this.level = level;
-  this.width = 10;
-  this.height = 10;
+  this.width = 90;
+  this.height = 90;
+
+  ///////////////////////
+  // Sprite Management //
+  ///////////////////////
+  this.spritesheets = sprites;
+  this.sprites = {};
+  for (var key in this.spritesheets) {
+    var s = sprite({
+      width: 90,
+      height: 90,
+      image: this.spritesheets[key],
+      ticksPerFrame: 24,
+      loop: true,
+      numberOfFrames: 2
+    });
+    this.sprites[key] = s;
+  }
+  console.log(this.sprites);
+  this.status = 'idle';
+  this.frame = 0;
+  this.isIdle = true;
+  this.isMoving = false;
+  this.isJumping = false;
 
   this.yVel = 0;
 
@@ -90,12 +134,33 @@ const Player = function(health, sprites, x, y, level) {
             }
           }
         }
-
-
       }
     }
-
   };
 
 
 }
+
+function sprite(options) {
+  var that = {};
+  that.frameIndex = 0;
+  that.tickCount = 0;
+  that.ticksPerFrame = options.ticksPerFrame || 0;
+  that.numberOfFrames = options.numberOfFrames || 1;
+  that.loop = options.loop;
+  that.width = options.width;
+  that.height = options.height;
+  that.image = options.image;
+  that.update = function() {
+    that.tickCount += 1;
+    if (that.tickCount > that.ticksPerFrame) {
+      that.tickCount = 0;
+      if (that.frameIndex < that.numberOfFrames - 1) {
+        that.frameIndex += 1;
+      } else if (that.loop) {
+        that.frameIndex = 0;
+      }
+    }
+  };
+  return that;
+};

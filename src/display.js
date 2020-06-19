@@ -23,9 +23,21 @@ const Display = function(cavnas) {
 
   this.render = function(game) {
     // console.log(game);
-
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(test);
-    this.ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
+    // this.ctx.fillRect(game.player.x, game.player.y, game.player.width, game.player.height);
+    this.renderSprite(game.player.sprites[game.player.status], game);
+
   };
+
+
+
+  this.renderSprite = function(sprite, game) {
+    // this.ctx.imageSmoothingEnabled = true;
+    // this.ctx.imageSmoothingQuality = 'high';
+    sprite.update();
+    var a = sprite.frameIndex * sprite.width;
+    this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, game.player.x, game.player.y, sprite.width, sprite.height)
+  };
+
 };
