@@ -44,8 +44,8 @@ const Game = function(controller, time_step) {
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
 
-    if (this.isLeft) {this.player.x -= 15;}
-    if (this.isRight) {this.player.x += 15;}
+    if (this.isLeft) {this.player.x -= 5;}
+    if (this.isRight) {this.player.x += 5;}
 
     ///////////////////////////
     /// Player acceleration ///
@@ -84,7 +84,7 @@ const Player = function(health, sprites, x, y, level) {
   this.y = y;
   this.onGround = false;
   this.level = level;
-  this.width = 90;
+  this.width = 60;
   this.height = 90;
 
   ///////////////////////
@@ -116,8 +116,15 @@ const Player = function(health, sprites, x, y, level) {
     this.x += x;
     this.y += y;
   };
+
+  var c = 0;
   this.detectGroundLevel = function() {
-    var edgeCase = (Math.floor((this.x + this.width) / tileSize) != Math.floor(this.x / tileSize)) || (Math.floor((this.x - this.width) / tileSize) != Math.floor(this.x / tileSize));
+    var edgeCase = (Math.floor((this.x + this.width/2) / tileSize) != Math.floor(this.x / tileSize)) || (Math.floor((this.x - this.width/2) / tileSize) != Math.floor(this.x / tileSize));
+    c += 1;
+    if (c % 25 == 0) {
+      console.log(edgeCase);
+    }
+
     for (var y = 0; y < this.level.length; y++) {
       for (var x = 0; x < this.level[y].length; x++) {
         if (edgeCase) {
@@ -136,6 +143,12 @@ const Player = function(health, sprites, x, y, level) {
         }
       }
     }
+    // var xOffset = this.x + 25;
+    // for (var y = 0; y < this.level.length; y++) {
+    //    for (var x = 0; x < this.level[y].length; x++) {
+    //      if ((xOffset + 40
+    //    }
+    //  }
   };
 
 
