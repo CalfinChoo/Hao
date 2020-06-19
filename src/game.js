@@ -43,14 +43,22 @@ const Game = function(controller, time_step) {
     this.isLeft = this.controller.left.input;
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
+    this.player.status = 'idle';
 
     if (this.isLeft) {
-      this.player.x -= 5;
+      this.player.x -= 9;
       this.player.isRight = false;
+      this.player.isMoving = true;
+      this.player.isIdle = false;
     }
-    if (this.isRight) {
-      this.player.x += 5;
+    else if (this.isRight) {
+      this.player.x += 9;
       this.player.isRight = true;
+      this.player.isMoving = true;
+      this.player.isIdle = false;
+    }
+    else {
+      this.player.isMoving = false;
     }
 
     ///////////////////////////
@@ -64,8 +72,12 @@ const Game = function(controller, time_step) {
         this.tickCounterOn = true;
         this.player.yVel = -200;
         this.tickCount = 0;
+        this.player.isJumping = true;
+        this.player.isIdle = false;
+        this.player.isMoving = false;
       }
       else {
+        this.player.isJumping = false;
         this.tickCounterOn = false;
         this.tickCount = 0;
         this.player.yVel = 0;
@@ -80,6 +92,13 @@ const Game = function(controller, time_step) {
 
     if (this.player.y + this.player.yVel * (this.tickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
     else this.player.y += this.player.yVel * (this.tickCount / this.time_step);
+
+    //console.log(this.player.status);
+    if (this.player.isJumping) this.player.status = "jump";
+    else if (this.player.isMoving) this.player.status = "walk";
+    else this.player.isIdle = true;
+    if (this.player.isIdle) this.player.status = "idle";
+
   };
 };
 
@@ -100,6 +119,8 @@ const Player = function(health, sprites, x, y, level) {
   this.sprites = {};
   this.spriteFrames = {
     'idle': 2,
+    'walk': 6,
+    'jump': 4
   };
   this.status = 'idle';
   for (var key in this.spritesheets) {
@@ -109,11 +130,13 @@ const Player = function(health, sprites, x, y, level) {
       image: this.spritesheets[key],
       ticksPerFrame: 24,
       loop: true,
-      numberOfFrames: this.spriteFrames[this.status]
+      numberOfFrames: this.spriteFrames[key]
     });
+    if (key.localeCompare("walk") == 0) s.ticksPerFrame = 16;
+    else if (key.localeCompare("jump") == 0) s.ticksPerFrame = 8;
     this.sprites[key] = s;
   }
-  console.log(this.sprites);
+  console.log(this.sprites['walk']);
   this.frame = 0;
   this.isIdle = true;
   this.isMoving = false;
