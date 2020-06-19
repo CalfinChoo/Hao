@@ -44,8 +44,14 @@ const Game = function(controller, time_step) {
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
 
-    if (this.isLeft) {this.player.x -= 5;}
-    if (this.isRight) {this.player.x += 5;}
+    if (this.isLeft) {
+      this.player.x -= 5;
+      this.player.isRight = false;
+    }
+    if (this.isRight) {
+      this.player.x += 5;
+      this.player.isRight = true;
+    }
 
     ///////////////////////////
     /// Player acceleration ///
@@ -92,6 +98,10 @@ const Player = function(health, sprites, x, y, level) {
   ///////////////////////
   this.spritesheets = sprites;
   this.sprites = {};
+  this.spriteFrames = {
+    'idle': 2,
+  };
+  this.status = 'idle';
   for (var key in this.spritesheets) {
     var s = sprite({
       width: 90,
@@ -99,16 +109,16 @@ const Player = function(health, sprites, x, y, level) {
       image: this.spritesheets[key],
       ticksPerFrame: 24,
       loop: true,
-      numberOfFrames: 2
+      numberOfFrames: this.spriteFrames[this.status]
     });
     this.sprites[key] = s;
   }
   console.log(this.sprites);
-  this.status = 'idle';
   this.frame = 0;
   this.isIdle = true;
   this.isMoving = false;
   this.isJumping = false;
+  this.isRight = true;
 
   this.yVel = 0;
 
@@ -119,36 +129,15 @@ const Player = function(health, sprites, x, y, level) {
 
   var c = 0;
   this.detectGroundLevel = function() {
-    var edgeCase = (Math.floor((this.x + this.width/2) / tileSize) != Math.floor(this.x / tileSize)) || (Math.floor((this.x - this.width/2) / tileSize) != Math.floor(this.x / tileSize));
-    c += 1;
-    if (c % 25 == 0) {
-      console.log(edgeCase);
-    }
-
     for (var y = 0; y < this.level.length; y++) {
       for (var x = 0; x < this.level[y].length; x++) {
-        if (edgeCase) {
           if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX() + tileSize) || (this.x <= this.level[y][x].getX() && this.x > this.level[y][x].getX() - tileSize)) && this.y <= this.level[y][x].getY()) {
             if (!this.level[y][x].getPassable()) {
               return this.level[y][x].y - this.height;
             }
           }
-        }
-        else {
-          if (this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX() + tileSize && this.y <= this.level[y][x].getY()) {
-            if (!this.level[y][x].getPassable()) {
-              return this.level[y][x].y - this.height;
-            }
-          }
-        }
       }
     }
-    // var xOffset = this.x + 25;
-    // for (var y = 0; y < this.level.length; y++) {
-    //    for (var x = 0; x < this.level[y].length; x++) {
-    //      if ((xOffset + 40
-    //    }
-    //  }
   };
 
 

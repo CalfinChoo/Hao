@@ -38,7 +38,13 @@ const Display = function(cavnas) {
     sprite.update();
     var a = sprite.frameIndex * sprite.width;
     var xOffset = sprite.width/4;
-    this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, game.player.x-xOffset, game.player.y, sprite.width, sprite.height)
+    if (!game.player.isRight) {
+      this.ctx.save();
+      this.ctx.scale(-1, 1);
+      this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, -1*(game.player.x-xOffset), game.player.y, sprite.width*-1, sprite.height);
+      this.ctx.restore();
+    }
+    else this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, game.player.x-xOffset, game.player.y, sprite.width, sprite.height);
   };
 
 };
