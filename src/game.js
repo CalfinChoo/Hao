@@ -3,7 +3,7 @@ const Game = function(controller, time_step) {
 
   this.level = test;
   this.time_step = time_step;
-  this.worldYAccel = 98.1;
+  this.worldYAccel = 50.1;
 
   this.controller = controller;
   this.isLeft = this.controller.left.input;
@@ -46,13 +46,17 @@ const Game = function(controller, time_step) {
     this.player.status = 'idle';
 
     if (this.isLeft) {
-      this.player.x -= 9;
+      // this.player.x -= 9;
+      if (this.player.xVel > 0) this.player.xVel = 0;
+      this.player.xAccel = -1;
       this.player.isRight = false;
       this.player.isMoving = true;
       this.player.isIdle = false;
     }
     else if (this.isRight) {
-      this.player.x += 9;
+      // this.player.x += 9;
+      if (this.player.xVel < 0) this.player.xVel = 0;
+      this.player.xAccel = 1;
       this.player.isRight = true;
       this.player.isMoving = true;
       this.player.isIdle = false;
@@ -70,7 +74,7 @@ const Game = function(controller, time_step) {
     if (this.player.onGround) {
       if (this.isUp) {
         this.tickCounterOn = true;
-        this.player.yVel = -200;
+        this.player.yVel = -150;
         this.tickCount = 0;
         this.player.isJumping = true;
         this.player.isIdle = false;
@@ -93,7 +97,21 @@ const Game = function(controller, time_step) {
     if (this.player.y + this.player.yVel * (this.tickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
     else this.player.y += this.player.yVel * (this.tickCount / this.time_step);
 
-    //console.log(this.player.status);
+
+    if (this.player.isMoving) {
+      console.log(this.player.x);
+      if (this.player.xVel + this.player.xAccel > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
+      else this.player.xVel += this.player.xAccel;
+      this.player.x += this.player.xVel;
+    }
+    else {
+      this.player.xAccel = 0;
+      this.player.xVel = 0;
+    }
+
+
+
+    // Status Updates
     if (this.player.isJumping) this.player.status = "jump";
     else if (this.player.isMoving) this.player.status = "walk";
     else this.player.isIdle = true;
@@ -111,6 +129,9 @@ const Player = function(health, sprites, x, y, level) {
   this.level = level;
   this.width = 60;
   this.height = 90;
+  this.xAccel = 0;
+  this.xVel = 0;
+  this.max_xVel = 15;
 
   ///////////////////////
   // Sprite Management //
@@ -133,10 +154,10 @@ const Player = function(health, sprites, x, y, level) {
       numberOfFrames: this.spriteFrames[key]
     });
     if (key.localeCompare("walk") == 0) s.ticksPerFrame = 16;
-    else if (key.localeCompare("jump") == 0) s.ticksPerFrame = 8;
+    else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 16; s.loop = false;}
     this.sprites[key] = s;
   }
-  console.log(this.sprites['walk']);
+  //console.log(this.sprites['walk']);
   this.frame = 0;
   this.isIdle = true;
   this.isMoving = false;
