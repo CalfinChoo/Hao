@@ -3,7 +3,7 @@ const Game = function(controller, time_step) {
 
   this.level = test;
   this.time_step = time_step;
-  this.worldYAccel = 50.1;
+  this.worldYAccel = 25;
 
   this.controller = controller;
   this.isLeft = this.controller.left.input;
@@ -74,11 +74,12 @@ const Game = function(controller, time_step) {
     if (this.player.onGround) {
       if (this.isUp) {
         this.tickCounterOn = true;
-        this.player.yVel = -150;
+        this.player.yVel = -100;
         this.tickCount = 0;
         this.player.isJumping = true;
         this.player.isIdle = false;
-        this.player.isMoving = false;
+        // console.log(this.player.sprites['jump']);
+        this.player.sprites['jump'].frameIndex = 0;
       }
       else {
         this.player.isJumping = false;
@@ -97,12 +98,14 @@ const Game = function(controller, time_step) {
     if (this.player.y + this.player.yVel * (this.tickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
     else this.player.y += this.player.yVel * (this.tickCount / this.time_step);
 
-
+    this.wall = this.player.detectWall();
     if (this.player.isMoving) {
-      console.log(this.player.x);
       if (this.player.xVel + this.player.xAccel > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
+      else if (this.player.xVel + this.player.xAccel < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
       else this.player.xVel += this.player.xAccel;
-      this.player.x += this.player.xVel;
+      if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel >= this.wall) this.player.x = this.wall - this.player.width;
+      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel <= this.wall) this.player.x = this.wall + 1;
+      else this.player.x += this.player.xVel;
     }
     else {
       this.player.xAccel = 0;
@@ -127,11 +130,11 @@ const Player = function(health, sprites, x, y, level) {
   this.y = y;
   this.onGround = false;
   this.level = level;
-  this.width = 60;
+  this.width = 45;
   this.height = 90;
   this.xAccel = 0;
   this.xVel = 0;
-  this.max_xVel = 15;
+  this.max_xVel = 10;
 
   ///////////////////////
   // Sprite Management //
@@ -154,7 +157,7 @@ const Player = function(health, sprites, x, y, level) {
       numberOfFrames: this.spriteFrames[key]
     });
     if (key.localeCompare("walk") == 0) s.ticksPerFrame = 16;
-    else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 16; s.loop = false;}
+    else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 18; s.loop = false;}
     this.sprites[key] = s;
   }
   //console.log(this.sprites['walk']);
@@ -175,13 +178,38 @@ const Player = function(health, sprites, x, y, level) {
   this.detectGroundLevel = function() {
     for (var y = 0; y < this.level.length; y++) {
       for (var x = 0; x < this.level[y].length; x++) {
-          if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX() + tileSize) || (this.x <= this.level[y][x].getX() && this.x > this.level[y][x].getX() - tileSize)) && this.y <= this.level[y][x].getY()) {
+          if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX() + tileSize) || (this.x <= this.level[y][x].getX() && this.x + this.width > this.level[y][x].getX())) && this.y <= this.level[y][x].getY()) {
             if (!this.level[y][x].getPassable()) {
               return this.level[y][x].y - this.height;
             }
           }
       }
     }
+  };
+  this.detectWall = function() {
+    if (this.isRight) {
+      for (var y = 0; y < this.level.length; y++) {
+        for (var x = 0; x < this.level[y].length; x++) {
+          if ((this.x < this.level[y][x].getX() && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())) {
+            if (!this.level[y][x].getPassable()) {
+              return this.level[y][x].x;
+            }
+          }
+        }
+      }
+    }
+    else {
+      for (var y = 0; y < this.level.length; y++) {
+        for (var x = 0; x < this.level[y].length; x++) {
+          if ((this.x > this.level[y][x].getX() + tileSize && this.x - (this.level[y][x].getX() + tileSize) <= tileSize && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())) {
+            if (!this.level[y][x].getPassable()) {
+              return this.level[y][x].x + tileSize;
+            }
+          }
+        }
+      }
+    }
+    return false;
   };
 
 
