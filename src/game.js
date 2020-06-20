@@ -33,7 +33,7 @@ const Game = function(controller, time_step) {
     // console.log(dict);
     return dict;
   };
-  this.player = new Player(3, this.initializePlayerSprites(), 50, 50, this.level);
+  this.player = new Player(3, this.initializePlayerSprites(), 50, 250, this.level);
 
   this.tickCount = 0;
   this.tickCounterOn = false;
@@ -104,7 +104,7 @@ const Game = function(controller, time_step) {
       else if (this.player.xVel + this.player.xAccel < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
       else this.player.xVel += this.player.xAccel;
       if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel >= this.wall) this.player.x = this.wall - this.player.width;
-      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel <= this.wall) this.player.x = this.wall + 1;
+      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel <= this.wall) this.player.x = this.wall + .1;
       else this.player.x += this.player.xVel;
     }
     else {
@@ -152,7 +152,7 @@ const Player = function(health, sprites, x, y, level) {
       width: 90,
       height: 90,
       image: this.spritesheets[key],
-      ticksPerFrame: 24,
+      ticksPerFrame: 32,
       loop: true,
       numberOfFrames: this.spriteFrames[key]
     });
