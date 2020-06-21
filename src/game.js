@@ -36,8 +36,10 @@ const Game = function(controller, time_step) {
   };
   this.player = new Player(3, this.initializePlayerSprites(), 50, 250, this.level);
 
-  this.tickCount = 0;
-  this.tickCounterOn = false;
+  this.yTickCount = 0;
+  this.xTickCount = 0;
+  this.yTickCounterOn = false;
+  this.xTickCounterOn = false;
   this.groundLevel = 500;
 
   this.update = function() {
@@ -49,9 +51,10 @@ const Game = function(controller, time_step) {
     this.player.isMoving = false;
 
     if (this.isLeft) {
-      // this.player.x -= 9;
+      this.xTickCounterOn = true;
       if (this.player.xVel > 0) this.player.xVel = 0;
-      this.player.xAccel = -1;
+      if (this.player.xVel == 0) this.xTickCount = 0;
+      this.player.xAccel = -40;
       this.player.isRight = false;
       this.player.isMoving = true;
       this.player.isIdle = false;
@@ -62,9 +65,10 @@ const Game = function(controller, time_step) {
     //   this.player.isMoving = true;
     // }
     else if (this.isRight) {
-      // this.player.x += 9;
+      this.xTickCounterOn = true;
       if (this.player.xVel < 0) this.player.xVel = 0;
-      this.player.xAccel = 1;
+      if (this.player.xVel == 0) this.xTickCount = 0;
+      this.player.xAccel = 40;
       this.player.isRight = true;
       this.player.isMoving = true;
       this.player.isIdle = false;
@@ -83,9 +87,9 @@ const Game = function(controller, time_step) {
     else this.player.onGround = false;
     if (this.player.onGround) {
       if (this.isUp) {
-        this.tickCounterOn = true;
+        this.yTickCounterOn = true;
         this.player.yVel = -100;
-        this.tickCount = 0;
+        this.yTickCount = 0;
         this.player.isJumping = true;
         this.player.isIdle = false;
         // console.log(this.player.sprites['jump']);
@@ -93,26 +97,29 @@ const Game = function(controller, time_step) {
       }
       else {
         this.player.isJumping = false;
-        this.tickCounterOn = false;
-        this.tickCount = 0;
+        this.yTickCounterOn = false;
+        this.yTickCount = 0;
         this.player.yVel = 0;
       }
       this.player.hasDash = true;
     }
     else {
-      this.tickCounterOn = true;
-      if (this.player.yVel + this.worldYAccel * (this.tickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
-      else this.player.yVel += this.worldYAccel * (this.tickCount / this.time_step);
-
+      this.yTickCounterOn = true;
+      if (this.player.yVel + this.worldYAccel * (this.yTickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
+      else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
     }
-    if (this.tickCounterOn) this.tickCount += 1;
-    else this.tickCount = 0;
 
-    if (this.player.y + this.player.yVel * (this.tickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
-    else this.player.y += this.player.yVel * (this.tickCount / this.time_step);
+    if (this.yTickCounterOn) this.yTickCount += 1;
+    else this.yTickCount = 0;
+
+    if (this.player.y + this.player.yVel * (this.yTickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
+    else this.player.y += this.player.yVel * (this.yTickCount / this.time_step);
+
+
 
     this.wall = this.player.detectWall();
     if (this.player.isMoving) {
+
       if (this.player.xVel > this.player.max_xVel) {
         // were in the dash bb
         this.player.xVel += this.player.dashAccel;
@@ -120,32 +127,28 @@ const Game = function(controller, time_step) {
       else if (this.player.xVel < -1 * this.player.max_xVel) {
         this.player.xVel += -1 * this.player.dashAccel;
       }
-      else {
-        if (this.player.xVel < 0 && this.player.xVel + this.player.xAccel > 0) this.player.xVel = 0;
-        else if (this.player.xVel > 0 && this.player.xVel + this.player.xAccel < 0) this.player.xVel = 0;
 
-        if (this.player.xVel + this.player.xAccel > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
-        else if (this.player.xVel + this.player.xAccel < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
+      else {
+        if (this.player.xVel < 0 && this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) > 0) this.player.xVel = 0;
+        else if (this.player.xVel > 0 && this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) < 0) this.player.xVel = 0;
+
+        if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
+        else if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
         else this.player.xVel += this.player.xAccel;
       }
 
-
-
-      if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel >= this.wall) {
+      if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel * (this.xTickCount / this.time_step) >= this.wall) {
         this.player.x = this.wall - this.player.width;
         if (this.player.yVel < 0) this.player.dashAccel = -100;
       }
-      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel <= this.wall) {
+      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel * (this.xTickCount / this.time_step) <= this.wall) {
         this.player.x = this.wall + 1;
         if (this.player.yVel < 0) this.player.dashAccel = -100;
       }
       else {
-        this.player.x += this.player.xVel;
+        this.player.x += this.player.xVel * (this.xTickCount / this.time_step);
         this.player.dashAccel = -10;
       }
-
-
-
     }
     else {
       this.player.xAccel = 0;
@@ -173,7 +176,10 @@ const Game = function(controller, time_step) {
       this.player.hasDash = false;
     }
 
-
+    if (this.xTickCounterOn) this.xTickCount += 1;
+    else this.xTickCount = 0;
+    if (this.player.xVel == 0) this.xTickCounterOn = false;
+    console.log(this.yTickCount);
 
     // Status Updates
     if (this.player.isJumping) this.player.status = "jump";
