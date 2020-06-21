@@ -32,8 +32,9 @@ const Display = function(cavnas) {
   };
 
   this.render = function(game) {
-    // console.log(game);
+    // console.log(this.xOffset);
     var playerX = Math.round(game.player.x), playerY = Math.round(game.player.y);
+    if (game.player.x < this.viewBorderLeft) this.xOffset = 0;
     if (playerX > this.viewBorderLeft && playerX < this.viewBorderLeft + this.xOffset) {
       this.xOffset += playerX - (this.viewBorderLeft + this.xOffset);
     }
@@ -43,7 +44,8 @@ const Display = function(cavnas) {
     if (this.xOffset > 0) {
       playerX -= this.xOffset;
     }
-    if (playerY < this.viewBorderTop + this.yOffset) {
+    if (game.player.y < this.viewBorderTop) this.yOffset = 0;
+    if (playerY < this.viewBorderTop + this.yOffset && playerY > this.viewBorderTop + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderTop + this.yOffset);
     }
     else if (playerY > this.viewBorderBottom + this.yOffset) {
@@ -52,6 +54,7 @@ const Display = function(cavnas) {
     if (this.yOffset < 0) {
       playerY -= this.yOffset;
     }
+    //console.log(game.player.y);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(test);
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
