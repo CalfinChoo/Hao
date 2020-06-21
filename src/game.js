@@ -17,21 +17,21 @@ const Game = function(controller, time_step) {
 
   this.initializePlayerSprites = function() {
     var dict = new Object();
-    /////////////
-    // Walking //
-    /////////////
+    ///////////////
+    /// Walking ///
+    ///////////////
     var img = new Image();
     img.src = "assets/walk.png"
     dict['walk'] = img;
-    //////////
-    // Idle //
-    //////////
+    ////////////
+    /// Idle ///
+    ////////////
     img = new Image();
     img.src = "assets/idle.png"
     dict['idle'] = img;
-    /////////////
-    // Jumping //
-    /////////////
+    ///////////////
+    /// Jumping ///
+    ///////////////
     img = new Image();
     img.src = "assets/jump.png"
     dict['jump'] = img;
@@ -59,34 +59,29 @@ const Game = function(controller, time_step) {
       if (this.player.xVel > 0) this.player.xVel = 0;
       this.player.xAccel = -50;
       if (this.player.isRight)  this.xTickCount = 0;
+      if (this.player.isJumping && this.xTickCount < this.time_step / 2) this.xTickCount = this.time_step / 2;
       this.player.isRight = false;
       this.player.isMoving = true;
       this.player.isIdle = false;
     }
-    // else if (this.player.xVel < 0) {
-    //   this.player.xAccel = 1;
-    //   this.player.isRight = true;
-    //   this.player.isMoving = true;
-    // }
     else if (this.isRight) {
       this.xTickCounterOn = true;
       if (this.player.xVel < 0) this.player.xVel = 0;
       this.player.xAccel = 50;
       if (!this.player.isRight)  this.xTickCount = 0;
+      if (this.player.isJumping && this.xTickCount < this.time_step / 2) this.xTickCount = this.time_step / 2;
       this.player.isRight = true;
       this.player.isMoving = true;
       this.player.isIdle = false;
     }
-    // else if (this.player.xVel > 0) {
-    //   this.player.xAccel = -1;
-    //   this.player.isMoving = true;
-    // }
 
 
     ///////////////////////////
     /// Player acceleration ///
     ///////////////////////////
     this.groundLevel = this.player.detectGroundLevel();
+    this.ceilingLevel = this.player.detectCeilingLevel();
+    // console.log(this.player.xVel);
     if (this.player.y >= this.groundLevel) this.player.onGround = true;
     else this.player.onGround = false;
     if (this.player.onGround) {
@@ -96,7 +91,6 @@ const Game = function(controller, time_step) {
         this.yTickCount = 0;
         this.player.isJumping = true;
         this.player.isIdle = false;
-        // console.log(this.player.sprites['jump']);
         this.player.sprites['jump'].frameIndex = 0;
       }
       else {
@@ -117,33 +111,29 @@ const Game = function(controller, time_step) {
     else this.yTickCount = 0;
 
     if (this.player.y + this.player.yVel * (this.yTickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
+    else if (this.player.y + this.player.yVel * (this.yTickCount / this.time_step) < this.ceilingLevel) {
+      this.player.y = this.ceilingLevel + 1;
+      this.player.yVel = 0;
+    }
     else this.player.y += this.player.yVel * (this.yTickCount / this.time_step);
-
 
 
     this.wall = this.player.detectWall();
     if (this.player.isMoving) {
 
+      ////////////////////
+      /// Dash Checker ///
+      ////////////////////
       if (this.player.xVel > this.player.max_xVel) {
         this.player.hasDash = false;
-        // were in the dash bb
         this.player.xVel += 2 * this.player.dashAccel;
       }
       else if (this.player.xVel < -1 * this.player.max_xVel) {
         this.player.hasDash = false;
         this.player.xVel += -2 * this.player.dashAccel;
       }
-      // if (this.player.yVel > this.player.max_yVel) {
-      //   this.player.yVel += this.player.dashAccel;
-      // }
-      // else if (this.player.yVel < -1 * this.player.max_yVel) {
-      //   this.player.yVel += -1 * this.player.dashAccel;
-      // }
 
       else {
-        // if (this.player.xVel < 0 && this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) > 0) this.player.xVel = 0;
-        // else if (this.player.xVel > 0 && this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) < 0) this.player.xVel = 0;
-
         if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
         else if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
         else this.player.xVel += this.player.xAccel * (this.xTickCount / this.time_step);
@@ -161,7 +151,6 @@ const Game = function(controller, time_step) {
         if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) < this.worldLeftBorder) this.player.x = this.worldLeftBorder;
         else if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) > this.worldRightBorder - tileSize) this.player.x = this.worldRightBorder - tileSize;
         else this.player.x += this.player.xVel * (this.xTickCount / this.time_step);
-        // this.player.dashAccel = -10;
       }
     }
     else {
@@ -191,19 +180,18 @@ const Game = function(controller, time_step) {
       }
       this.player.hasDash = false;
     }
-    // console.log(this.player.xVel);
 
     if (this.xTickCounterOn) this.xTickCount += 1;
     else this.xTickCount = 0;
     if (this.player.xVel == 0) this.xTickCounterOn = false;
-    // console.log(this.player.x);
 
-    // Status Updates
+    //////////////////////
+    /// Status Updates ///
+    //////////////////////
     if (this.player.isJumping) this.player.status = "jump";
     else if (this.player.isMoving) this.player.status = "walk";
     else this.player.isIdle = true;
     if (this.player.isIdle) this.player.status = "idle";
-
   };
 };
 
@@ -218,6 +206,7 @@ const Player = function(health, sprites, x, y, level) {
   this.height = 90;
   this.xAccel = 0;
   this.xVel = 0;
+  this.yVel = 0;
   this.max_xVel = 10;
   this.max_yVel = 30;
   this.hasDash = true;
@@ -248,21 +237,18 @@ const Player = function(health, sprites, x, y, level) {
     else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 18; s.loop = false;}
     this.sprites[key] = s;
   }
-  //console.log(this.sprites['walk']);
+
   this.frame = 0;
   this.isIdle = true;
   this.isMoving = false;
   this.isJumping = false;
   this.isRight = true;
 
-  this.yVel = 0;
-
   this.move = function(x, y) {
     this.x += x;
     this.y += y;
   };
 
-  var c = 0;
   this.detectGroundLevel = function() {
     for (var y = 0; y < this.level.length; y++) {
       for (var x = 0; x < this.level[y].length; x++) {
@@ -274,6 +260,22 @@ const Player = function(health, sprites, x, y, level) {
       }
     }
   };
+
+  this.detectCeilingLevel = function() {
+    var highest;
+    for (var y = 0; y < this.level.length; y++) {
+      for (var x = 0; x < this.level[y].length; x++) {
+          if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX() + tileSize) || (this.x <= this.level[y][x].getX() && this.x + this.width > this.level[y][x].getX())) && this.y >= this.level[y][x].getY()) {
+            if (!this.level[y][x].getPassable()) {
+              if (highest === undefined) highest = this.level[y][x].y;
+              else if (this.level[y][x].y > highest) highest = this.level[y][x].y;
+            }
+          }
+      }
+    }
+    return highest + tileSize;
+  };
+
   this.detectWall = function() {
     if (this.isRight) {
       for (var y = 0; y < this.level.length; y++) {
@@ -299,8 +301,6 @@ const Player = function(health, sprites, x, y, level) {
     }
     return false;
   };
-
-
 }
 
 function sprite(options) {
