@@ -151,17 +151,17 @@ const Game = function(controller, time_step) {
 
       if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel * (this.xTickCount / this.time_step) >= this.wall) {
         this.player.x = this.wall - this.player.width;
-        if (this.player.yVel < 0) this.player.dashAccel = -100;
+        if (this.player.xVel > this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
       else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel * (this.xTickCount / this.time_step) <= this.wall) {
         this.player.x = this.wall + 1;
-        if (this.player.yVel < 0) this.player.dashAccel = -100;
+        if (this.player.xVel < -1 * this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
       else {
         if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) < this.worldLeftBorder) this.player.x = this.worldLeftBorder;
         else if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) > this.worldRightBorder - tileSize) this.player.x = this.worldRightBorder - tileSize;
         else this.player.x += this.player.xVel * (this.xTickCount / this.time_step);
-        this.player.dashAccel = -10;
+        // this.player.dashAccel = -10;
       }
     }
     else {
