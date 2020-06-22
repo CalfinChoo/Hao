@@ -59,7 +59,6 @@ const Display = function(cavnas) {
     this.parseLevel(test);
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight);
-
   };
 
 
@@ -73,10 +72,10 @@ const Display = function(cavnas) {
     if (!isRight) {
       this.ctx.save();
       this.ctx.scale(-1, 1);
-      this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, -1*(playerX-xOffset), playerY, sprite.width*-1, sprite.height);
+      this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, -1*(playerX-xOffset), playerY - 5, sprite.width*-1, sprite.height);
       this.ctx.restore();
     }
-    else this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, playerX-xOffset, playerY, sprite.width, sprite.height);
+    else this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, playerX-xOffset, playerY - 5, sprite.width, sprite.height);
   };
 
 };
