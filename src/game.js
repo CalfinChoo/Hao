@@ -14,6 +14,7 @@ const Game = function(controller, time_step) {
   this.isRight = this.controller.right.input;
   this.isUp = this.controller.up.input;
   this.isDown = this.controller.down.input;
+  this.isJump = this.controller.jump.input;
   this.isDash = this.controller.dash.input;
   this.isClimb = this.controller.climb.input;
 
@@ -55,6 +56,7 @@ const Game = function(controller, time_step) {
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
     this.isDown = this.controller.down.input;
+    this.isJump = this.controller.jump.input;
     this.isDash = this.controller.dash.input;
     this.isClimb = this.controller.climb.input;
     this.player.status = 'idle';
@@ -85,11 +87,15 @@ const Game = function(controller, time_step) {
       this.player.yVel = 0;
       this.yTickCount = 0;
       this.xTickCount = 0;
+      this.player.isMoving = false;
       if (this.isUp) {
         this.player.y += -5;
       }
       else if (this.isDown) {
         this.player.y += 5;
+      }
+      if (this.isJump) {
+
       }
     }
 
@@ -102,7 +108,7 @@ const Game = function(controller, time_step) {
     if (this.player.y >= this.groundLevel) this.player.onGround = true;
     else this.player.onGround = false;
     if (this.player.onGround) {
-      if (this.isUp) {
+      if (this.isJump) {
         this.yTickCounterOn = true;
         this.player.yVel = -100;
         this.yTickCount = 0;
@@ -110,7 +116,7 @@ const Game = function(controller, time_step) {
         this.player.isIdle = false;
         this.player.sprites['jump'].frameIndex = 0;
       }
-      else {
+      else if (this.player.hasDash) {
         this.player.isJumping = false;
         this.yTickCounterOn = false;
         this.yTickCount = 0;
@@ -164,7 +170,6 @@ const Game = function(controller, time_step) {
       ////////////////////
       /// Wall Checker ///
       ////////////////////
-      // console.log(this.wall);
       if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel * (this.xTickCount / this.time_step) >= this.wall) {
         this.player.x = this.wall - this.player.width;
         this.canClimb = true;
@@ -196,12 +201,16 @@ const Game = function(controller, time_step) {
       if (this.isUp && this.isRight) {
         this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
         this.player.yVel = -1 * Math.sin(Math.PI / 4) * this.player.dashVel;
+        this.yTickCounterOn = true;
         this.yTickCount = this.time_step / 2;
+        console.log(this.player.yVel);
       }
       else if (this.isUp && this.isLeft) {
         this.player.xVel = Math.cos(3 * Math.PI / 4) * this.player.dashVel;
         this.player.yVel = -1 * Math.sin(3 * Math.PI / 4) * this.player.dashVel;
+        this.yTickCounterOn = true;
         this.yTickCount = this.time_step / 2;
+        console.log(this.player.yVel);
       }
       else if (this.isDown && this.isRight) {
         this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
