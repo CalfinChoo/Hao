@@ -13,7 +13,9 @@ const Game = function(controller, time_step) {
   this.isLeft = this.controller.left.input;
   this.isRight = this.controller.right.input;
   this.isUp = this.controller.up.input;
-  this.isSpace = this.controller.space.input;
+  this.isDown = this.controller.down.input;
+  this.isDash = this.controller.dash.input;
+  this.isClimb = this.controller.climb.input;
 
   this.initializePlayerSprites = function() {
     var dict = new Object();
@@ -45,14 +47,19 @@ const Game = function(controller, time_step) {
   this.yTickCounterOn = false;
   this.xTickCounterOn = false;
   this.groundLevel = 500;
+  this.canClimb = false;
+  this.isDashing = false;
 
   this.update = function() {
     this.isLeft = this.controller.left.input;
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
-    this.isSpace = this.controller.space.input;
+    this.isDown = this.controller.down.input;
+    this.isDash = this.controller.dash.input;
+    this.isClimb = this.controller.climb.input;
     this.player.status = 'idle';
     this.player.isMoving = false;
+
 
     if (this.isLeft) {
       this.xTickCounterOn = true;
@@ -74,6 +81,17 @@ const Game = function(controller, time_step) {
       this.player.isMoving = true;
       this.player.isIdle = false;
     }
+    if (this.canClimb && this.isClimb && this.wall) {
+      this.player.yVel = 0;
+      this.yTickCount = 0;
+      this.xTickCount = 0;
+      if (this.isUp) {
+        this.player.y += -5;
+      }
+      else if (this.isDown) {
+        this.player.y += 5;
+      }
+    }
 
 
     ///////////////////////////
@@ -81,7 +99,6 @@ const Game = function(controller, time_step) {
     ///////////////////////////
     this.groundLevel = this.player.detectGroundLevel();
     this.ceilingLevel = this.player.detectCeilingLevel();
-    // console.log(this.player.xVel);
     if (this.player.y >= this.groundLevel) this.player.onGround = true;
     else this.player.onGround = false;
     if (this.player.onGround) {
@@ -102,13 +119,20 @@ const Game = function(controller, time_step) {
       this.player.hasDash = true;
     }
     else {
-      this.yTickCounterOn = true;
-      if (this.player.yVel + this.worldYAccel * (this.yTickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
-      else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
+      if (this.canClimb && this.isClimb) {
+        this.yTickCounterOn = false;
+        this.yTickCount = 0;
+      }
+      else {
+        this.yTickCounterOn = true;
+        if (this.player.yVel + this.worldYAccel * (this.yTickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
+        else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
+      }
     }
-
+    // console.log(this.player.yVel);
     if (this.yTickCounterOn) this.yTickCount += 1;
     else this.yTickCount = 0;
+
 
     if (this.player.y + this.player.yVel * (this.yTickCount / this.time_step) > this.groundLevel) this.player.y = this.groundLevel;
     else if (this.player.y + this.player.yVel * (this.yTickCount / this.time_step) < this.ceilingLevel) {
@@ -118,9 +142,9 @@ const Game = function(controller, time_step) {
     else this.player.y += this.player.yVel * (this.yTickCount / this.time_step);
 
 
+
     this.wall = this.player.detectWall();
     if (this.player.isMoving) {
-
       ////////////////////
       /// Dash Checker ///
       ////////////////////
@@ -132,22 +156,30 @@ const Game = function(controller, time_step) {
         this.player.hasDash = false;
         this.player.xVel += -2 * this.player.dashAccel;
       }
-
       else {
         if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) > this.player.max_xVel) this.player.xVel = this.player.max_xVel;
         else if (this.player.xVel + this.player.xAccel * (this.xTickCount / this.time_step) < -1*this.player.max_xVel) this.player.xVel = -1*this.player.max_xVel;
         else this.player.xVel += this.player.xAccel * (this.xTickCount / this.time_step);
       }
-
+      ////////////////////
+      /// Wall Checker ///
+      ////////////////////
+      // console.log(this.wall);
       if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel * (this.xTickCount / this.time_step) >= this.wall) {
         this.player.x = this.wall - this.player.width;
+        this.canClimb = true;
         if (this.player.xVel > this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
-      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel * (this.xTickCount / this.time_step) <= this.wall) {
-        this.player.x = this.wall + 1;
+      else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel * (this.xTickCount / this.time_step) < this.wall) {
+        this.player.x = this.wall + .11;
+        this.canClimb = true;
         if (this.player.xVel < -1 * this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
       else {
+        this.canClimb = false;
+        //////////////////////
+        /// Border Checker ///
+        //////////////////////
         if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) < this.worldLeftBorder) this.player.x = this.worldLeftBorder;
         else if (this.player.x + this.player.xVel * (this.xTickCount / this.time_step) > this.worldRightBorder - tileSize) this.player.x = this.worldRightBorder - tileSize;
         else this.player.x += this.player.xVel * (this.xTickCount / this.time_step);
@@ -158,24 +190,41 @@ const Game = function(controller, time_step) {
       this.player.xVel = 0;
     }
 
-    if (this.player.hasDash && this.isSpace) {
+    if (this.player.hasDash && this.isDash) {
       this.player.isMoving = true;
       this.xTickCount = this.time_step;
       if (this.isUp && this.isRight) {
         this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
         this.player.yVel = -1 * Math.sin(Math.PI / 4) * this.player.dashVel;
+        this.yTickCount = this.time_step / 2;
       }
       else if (this.isUp && this.isLeft) {
         this.player.xVel = Math.cos(3 * Math.PI / 4) * this.player.dashVel;
         this.player.yVel = -1 * Math.sin(3 * Math.PI / 4) * this.player.dashVel;
+        this.yTickCount = this.time_step / 2;
+      }
+      else if (this.isDown && this.isRight) {
+        this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
+        this.player.yVel = Math.sin(Math.PI / 4) * this.player.dashVel;
+        this.yTickCount = this.time_step;
+      }
+      else if (this.isDown && this.isLeft) {
+        this.player.xVel = Math.cos(3 * Math.PI / 4) * this.player.dashVel;
+        this.player.yVel = Math.sin(3 * Math.PI / 4) * this.player.dashVel;
+        this.yTickCount = this.time_step;
       }
       else if (this.isUp) {
         this.player.yVel = -1 * this.player.dashVel;
+        this.yTickCount = this.time_step / 2;
       }
-      else if (this.player.isRight || this.isRight) {
+      else if (this.isDown) {
+        this.player.yVel = this.player.dashVel;
+        this.yTickCount = this.time_step;
+      }
+      else if (this.isRight) {
         this.player.xVel = this.player.dashVel;
       }
-      else if (!this.player.isRight || this.isLeft) {
+      else if (this.isLeft) {
         this.player.xVel = -1* this.player.dashVel;
       }
       this.player.hasDash = false;
@@ -282,22 +331,25 @@ const Player = function(health, sprites, x, y, level) {
         for (var x = 0; x < this.level[y].length; x++) {
           if ((this.x < this.level[y][x].getX() && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())) {
             if (!this.level[y][x].getPassable()) {
-              return this.level[y][x].x;
+              return this.level[y][x].getX();
             }
           }
         }
       }
     }
     else {
+      var highest;
       for (var y = 0; y < this.level.length; y++) {
         for (var x = 0; x < this.level[y].length; x++) {
-          if ((this.x > this.level[y][x].getX() + tileSize && this.x - (this.level[y][x].getX() + tileSize) <= tileSize && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())) {
+          if ((this.x > this.level[y][x].getX() + tileSize && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())) {
             if (!this.level[y][x].getPassable()) {
-              return this.level[y][x].x + tileSize;
+              if (highest === undefined) highest = this.level[y][x].getX();
+              else if (this.level[y][x].x > highest) highest = this.level[y][x].getX();
             }
           }
         }
       }
+      return highest + tileSize;
     }
     return false;
   };
