@@ -11,6 +11,8 @@ const Display = function(cavnas) {
   this.viewBorderBottom = 260;
   this.xOffset = 0;
   this.yOffset = 0;
+  this.positions = [];
+  this.motionTrailLength = 20;
 
   this.img;
   this.parseLevel = function(arr) {
@@ -30,6 +32,8 @@ const Display = function(cavnas) {
       }
     }
   };
+  this.stockImg = new Image();
+  this.stockImg.src = "assets/jump.png"
 
   this.render = function(game) {
     // console.log(this.xOffset);
@@ -59,8 +63,30 @@ const Display = function(cavnas) {
     this.parseLevel(test);
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight);
+    this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
+    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash) {
+      for (var i = 0; i < this.positions.length; i++) {
+        this.ctx.save();
+        this.ctx.globalAlpha = 0.2;
+        // console.log(this.positions[i].xOffset + ", " + this.xOffset);
+        if (game.player.isRight) this.ctx.drawImage(this.stockImg, 270, 0, 90, 90, this.positions[i].x-22.5-(this.xOffset-this.positions[i].xOffset), this.positions[i].y, 90, 90);
+        else {
+          this.ctx.save();
+          this.ctx.scale(-1, 1);
+          this.ctx.drawImage(this.stockImg, 270, 0, 90, 90, -1*(this.positions[i].x-22.5-(this.xOffset-this.positions[i].xOffset)), this.positions[i].y, -90, 90)
+          this.ctx.restore();
+        }
+        this.ctx.restore();
+      }
+    }
+    // console.log(this.positions);
   };
-
+  this.storeLastPosition = function(playerX, playerY, xOff, yOff) {
+    this.positions.push({x: playerX, y: playerY, xOffset: xOff, yOffset: yOff});
+    if (this.positions.length > this.motionTrailLength) {
+      this.positions.shift();
+    }
+  };
 
 
   this.renderSprite = function(sprite, playerX, playerY, isRight) {

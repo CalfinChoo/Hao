@@ -89,7 +89,6 @@ const Game = function(controller, time_step) {
       this.player.isMoving = true;
       this.player.isIdle = false;
     }
-    // console.log(this.player.isClimbing);
 
     ///////////////////////////
     /// Player acceleration ///
@@ -126,7 +125,6 @@ const Game = function(controller, time_step) {
         else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
       }
     }
-    // console.log(this.player.yVel);
     if (this.yTickCounterOn) this.yTickCount += 1;
     else this.yTickCount = 0;
 
@@ -163,13 +161,11 @@ const Game = function(controller, time_step) {
       ////////////////////
       if (this.wall && this.player.isRight && this.player.x + this.player.width + this.player.xVel * (this.xTickCount / this.time_step) >= this.wall) {
         this.player.x = this.wall - this.player.width;
-        console.log("hi");
         this.player.canClimb = true;
         if (this.player.xVel > this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
       else if (this.wall && !this.player.isRight && this.player.x + this.player.xVel * (this.xTickCount / this.time_step) < this.wall) {
         this.player.x = this.wall + .11;
-        console.log("hey");
         this.player.canClimb = true;
         if (this.player.xVel < -1 * this.player.max_xVel && this.player.yVel < 0) this.player.yVel = 0;
       }
@@ -215,7 +211,8 @@ const Game = function(controller, time_step) {
       }
       else if (this.isUp) {
         this.player.yVel = -1 * this.player.dashVel;
-        this.yTickCount = this.time_step / 2;
+        this.yTickCount = this.time_step/3;
+        this.yTickCounterOn = true;
       }
       else if (this.isDown) {
         this.player.yVel = this.player.dashVel;
