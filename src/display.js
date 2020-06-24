@@ -9,7 +9,7 @@ const Display = function(cavnas) {
   this.xOffset = 0;
   this.yOffset = 0;
   this.positions = [];
-  this.motionTrailLength = 10;
+  this.motionTrailLength = 15;
 
   this.img;
   this.parseLevel = function(arr) {
@@ -62,10 +62,11 @@ const Display = function(cavnas) {
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
     // console.log(game.player.hasDash);
-    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash) {
+    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && (!game.player.hasDash)) {
       for (var i = 0; i < this.positions.length; i++) {
         this.ctx.save();
-        this.ctx.globalAlpha = 0.2;
+        var ratio = (i + 1) / this.positions.length;
+        this.ctx.globalAlpha = ratio;
         // console.log(this.positions[i].xOffset + ", " + this.xOffset);
         if (game.player.isRight) this.ctx.drawImage(this.stockImg, 270, 0, 90, 90, this.positions[i].x-22.5-(this.xOffset-this.positions[i].xOffset), this.positions[i].y, 90, 90);
         else {

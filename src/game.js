@@ -96,7 +96,7 @@ const Game = function(controller, time_step) {
     if (this.player.canClimb && this.isClimb && (this.wall == this.wallX)) {
       this.player.yVel = 0;
       this.yTickCount = 0;
-      this.xTickCount = 0;
+      // this.xTickCount = 0;
       this.player.isMoving = false;
       this.player.isClimbing = true;
       if (this.isUp) {
@@ -122,7 +122,7 @@ const Game = function(controller, time_step) {
           this.yTickCounterOn = true;
           this.yTickCount = this.time_step / 1.5;
           this.player.isRight = false;
-          this.player.walljumpCooldown = 7;
+          this.player.walljumpCooldown = 9;
         }
         else if (!this.player.isRight && this.player.walljumpCooldown == 0) {
           this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel / 1.5;
@@ -130,7 +130,7 @@ const Game = function(controller, time_step) {
           this.yTickCounterOn = true;
           this.yTickCount = this.time_step / 1.5;
           this.player.isRight = true;
-          this.player.walljumpCooldown = 7;
+          this.player.walljumpCooldown = 9;
         }
       }
     }
@@ -170,7 +170,7 @@ const Game = function(controller, time_step) {
         this.yTickCount = this.time_step;
       }
       else if (this.isUp) {
-        this.player.yVel = -1 * this.player.dashVel;
+        this.player.yVel = -1 * this.player.dashVel/1.5;
         this.yTickCount = this.time_step/3;
         this.yTickCounterOn = true;
       }
@@ -180,11 +180,11 @@ const Game = function(controller, time_step) {
       }
       else if (this.isRight) {
         this.player.yVel = 0;
-        this.player.xVel = this.player.dashVel/1.25;
+        this.player.xVel = this.player.dashVel/1.125;
       }
       else if (this.isLeft) {
         this.player.yVel = 0;
-        this.player.xVel = -1* this.player.dashVel/1.25;
+        this.player.xVel = -1* this.player.dashVel/1.125;
       }
       this.player.hasDash = false;
     }
@@ -221,8 +221,13 @@ const Game = function(controller, time_step) {
       }
       else {
         this.yTickCounterOn = true;
-        if (this.player.yVel + this.worldYAccel * (this.yTickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
-        else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
+        if (this.player.yVel > this.player.max_yVel) {
+          this.player.yVel += this.player.dashAccel;
+        }
+        else {
+          if (this.player.yVel + this.worldYAccel * (this.yTickCount / this.time_step) > this.player.max_yVel) this.player.yVel = this.player.max_yVel;
+          else this.player.yVel += this.worldYAccel * (this.yTickCount / this.time_step);
+        }
       }
       if (this.player.dashCooldown > 0) this.player.dashCooldown--;
     }
@@ -237,9 +242,6 @@ const Game = function(controller, time_step) {
     else this.player.y += this.player.yVel * (this.yTickCount / this.time_step);
 
     this.wall = this.player.detectFrontWall();
-    this.inWall = this.player.detectInWall();
-    if (this.inWall) this.player.x = this.lastX;
-    else this.lastX = this.player.x;
     if (this.player.isMoving) {
       ////////////////////
       /// Dash Checker ///
@@ -284,6 +286,9 @@ const Game = function(controller, time_step) {
       this.player.xAccel = 0;
       this.player.xVel = 0;
     }
+    this.player.inWall = this.player.detectInWall();
+    if (this.player.inWall) this.player.x = this.lastX;
+    else this.lastX = this.player.x;
 
     if (this.xTickCounterOn) this.xTickCount += 1;
     else this.xTickCount = 0;
@@ -319,6 +324,7 @@ const Player = function(health, sprites, x, y, level) {
   this.dashAccel = -10;
   this.dashCooldown = 0;
   this.walljumpCooldown = 0;
+  this.inWall = false;
 
   /////////////////////////
   /// Sprite Management ///
