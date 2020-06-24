@@ -1,10 +1,7 @@
 const Display = function(cavnas) {
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
-  // this.width = canvas.width;
-  // this.height = canvas.height;
-  // this.viewWidth, this.viewHeight;
-  // console.log(this.width);
+
   this.viewBorderLeft = 250;
   this.viewBorderRight = 300;
   this.viewBorderTop = 200;
@@ -12,7 +9,7 @@ const Display = function(cavnas) {
   this.xOffset = 0;
   this.yOffset = 0;
   this.positions = [];
-  this.motionTrailLength = 20;
+  this.motionTrailLength = 10;
 
   this.img;
   this.parseLevel = function(arr) {
@@ -64,6 +61,7 @@ const Display = function(cavnas) {
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
+    // console.log(game.player.hasDash);
     if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash) {
       for (var i = 0; i < this.positions.length; i++) {
         this.ctx.save();
