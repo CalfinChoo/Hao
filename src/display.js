@@ -59,7 +59,7 @@ const Display = function(cavnas) {
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
-    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && (!game.player.hasDash)) {
+    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall) {
       for (var i = 0; i < this.positions.length; i++) {
         this.ctx.save();
         var ratio = (i + 1) / this.positions.length;

@@ -119,6 +119,7 @@ const Game = function(controller, time_step) {
       this.yTickCount = 0;
       this.player.isMoving = false;
       this.player.isClimbing = true;
+      if (!this.player.hasDash) this.player.touchedWall = true;
       if (this.isUp) {
         if (this.player.y - 5 < this.ceilingLevel) this.player.y = this.ceilingLevel + 1;
         else this.player.y += -5;
@@ -209,7 +210,6 @@ const Game = function(controller, time_step) {
         this.player.xVel = -1* this.player.dashVel/1.125;
       }
     }
-    console.log(this.player.xVel);
 
     ///////////////////////////
     /// Player acceleration ///
@@ -233,6 +233,7 @@ const Game = function(controller, time_step) {
         this.yTickCount = 0;
         this.player.yVel = 0;
       }
+      this.player.touchedWall = false;
       if (this.player.dashCooldown > 0) this.player.dashCooldown--;
       else this.player.hasDash = true;
     }
@@ -347,6 +348,7 @@ const Player = function(health, sprites, x, y, level) {
   this.dashCooldown = 0;
   this.walljumpCooldown = 0;
   this.inWall = false;
+  this.touchedWall = false;
 
   /////////////////////////
   /// Sprite Management ///
