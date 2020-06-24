@@ -33,7 +33,6 @@ const Display = function(cavnas) {
   this.stockImg.src = "assets/jump.png"
 
   this.render = function(game) {
-    // console.log(this.xOffset);
     var playerX = Math.round(game.player.x), playerY = Math.round(game.player.y);
     if (game.player.x < this.viewBorderLeft) this.xOffset = 0;
     if (playerX > this.viewBorderLeft && playerX < this.viewBorderLeft + this.xOffset) {
@@ -55,19 +54,16 @@ const Display = function(cavnas) {
     if (this.yOffset < 0) {
       playerY -= this.yOffset;
     }
-    //console.log(game.player.y);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(test);
     this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
-    this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight);
+    this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
-    // console.log(game.player.hasDash);
     if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && (!game.player.hasDash)) {
       for (var i = 0; i < this.positions.length; i++) {
         this.ctx.save();
         var ratio = (i + 1) / this.positions.length;
         this.ctx.globalAlpha = ratio;
-        // console.log(this.positions[i].xOffset + ", " + this.xOffset);
         if (game.player.isRight) this.ctx.drawImage(this.stockImg, 270, 0, 90, 90, this.positions[i].x-22.5-(this.xOffset-this.positions[i].xOffset), this.positions[i].y, 90, 90);
         else {
           this.ctx.save();
@@ -78,7 +74,6 @@ const Display = function(cavnas) {
         this.ctx.restore();
       }
     }
-    // console.log(this.positions);
   };
   this.storeLastPosition = function(playerX, playerY, xOff, yOff) {
     this.positions.push({x: playerX, y: playerY, xOffset: xOff, yOffset: yOff});
@@ -87,20 +82,20 @@ const Display = function(cavnas) {
     }
   };
 
-
-  this.renderSprite = function(sprite, playerX, playerY, isRight) {
-    // this.ctx.imageSmoothingEnabled = true;
-    // this.ctx.imageSmoothingQuality = 'high';
+  this.renderSprite = function(sprite, playerX, playerY, isRight, hasDash) {
+    var img;
+    if (hasDash) img = sprite.image;
+    else img = sprite.image_noDash;
     sprite.update();
     var a = sprite.frameIndex * sprite.width;
     var xOffset = sprite.width/4;
     if (!isRight) {
       this.ctx.save();
       this.ctx.scale(-1, 1);
-      this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, -1*(playerX-xOffset), playerY - 5, sprite.width*-1, sprite.height);
+      this.ctx.drawImage(img, a, 0, sprite.width, sprite.height, -1*(playerX-xOffset), playerY - 5, sprite.width*-1, sprite.height);
       this.ctx.restore();
     }
-    else this.ctx.drawImage(sprite.image, a, 0, sprite.width, sprite.height, playerX-xOffset, playerY - 5, sprite.width, sprite.height);
+    else this.ctx.drawImage(img, a, 0, sprite.width, sprite.height, playerX-xOffset, playerY - 5, sprite.width, sprite.height);
   };
 
 };

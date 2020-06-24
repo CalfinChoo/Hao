@@ -20,30 +20,51 @@ const Game = function(controller, time_step) {
 
   this.initializePlayerSprites = function() {
     var dict = new Object();
+    var temp = [];
     ///////////////
     /// Walking ///
     ///////////////
     var img = new Image();
-    img.src = "assets/walk.png"
-    dict['walk'] = img;
+    img.src = "assets/walk.png";
+    temp.push(img);
+    img = new Image();
+    img.src = "assets/walk_noDash.png";
+    temp.push(img);
+    dict['walk'] = temp;
+    temp = [];
     ////////////
     /// Idle ///
     ////////////
     img = new Image();
-    img.src = "assets/idle.png"
-    dict['idle'] = img;
+    img.src = "assets/idle.png";
+    temp.push(img);
+    img = new Image();
+    img.src = "assets/idle_noDash.png";
+    temp.push(img);
+    dict['idle'] = temp;
+    temp = [];
     ///////////////
     /// Jumping ///
     ///////////////
     img = new Image();
-    img.src = "assets/jump.png"
-    dict['jump'] = img;
+    img.src = "assets/jump.png";
+    temp.push(img);
+    img = new Image();
+    img.src = "assets/jump_noDash.png";
+    temp.push(img);
+    dict['jump'] = temp;
+    temp = [];
     ////////////////
     /// Climbing ///
     ////////////////
     img = new Image();
-    img.src = "assets/climb.png"
-    dict['climb'] = img;
+    img.src = "assets/climb.png";
+    temp.push(img);
+    img = new Image();
+    img.src = "assets/climb_noDash.png";
+    temp.push(img);
+    dict['climb'] = temp;
+    temp = [];
     return dict;
   };
   this.player = new Player(3, this.initializePlayerSprites(), 50, 250, this.level);
@@ -96,7 +117,6 @@ const Game = function(controller, time_step) {
     if (this.player.canClimb && this.isClimb && (this.wall == this.wallX)) {
       this.player.yVel = 0;
       this.yTickCount = 0;
-      // this.xTickCount = 0;
       this.player.isMoving = false;
       this.player.isClimbing = true;
       if (this.isUp) {
@@ -133,6 +153,7 @@ const Game = function(controller, time_step) {
           this.player.walljumpCooldown = 9;
         }
       }
+      // if (this.isDash) {this.xTickCount = this.time_step; this.xTickCounterOn = true; this.player.xVel = 50; console.log(this.player.xVel);}
     }
     else {
       this.player.isClimbing = false;
@@ -147,6 +168,7 @@ const Game = function(controller, time_step) {
       this.player.isMoving = true;
       this.xTickCount = this.time_step/2;
       this.player.dashCooldown = 5;
+      this.player.hasDash = false;
       if (this.isUp && this.isRight) {
         this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
         this.player.yVel = -1 * Math.sin(Math.PI / 4) * this.player.dashVel;
@@ -186,8 +208,8 @@ const Game = function(controller, time_step) {
         this.player.yVel = 0;
         this.player.xVel = -1* this.player.dashVel/1.125;
       }
-      this.player.hasDash = false;
     }
+    console.log(this.player.xVel);
 
     ///////////////////////////
     /// Player acceleration ///
@@ -342,7 +364,8 @@ const Player = function(health, sprites, x, y, level) {
     var s = sprite({
       width: 90,
       height: 90,
-      image: this.spritesheets[key],
+      image: this.spritesheets[key][0],
+      image_noDash: this.spritesheets[key][1],
       ticksPerFrame: 32,
       loop: true,
       numberOfFrames: this.spriteFrames[key]
@@ -445,6 +468,7 @@ function sprite(options) {
   that.width = options.width;
   that.height = options.height;
   that.image = options.image;
+  that.image_noDash = options.image_noDash;
   that.update = function() {
     if (this.tickCountOn) {
       that.tickCount += 1;
