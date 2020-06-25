@@ -1,27 +1,30 @@
 var arrays =
-[["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["S","S","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"]];
+[ ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S0","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"] ];
 
 
 
-const Tile = function(x, y, passable, sprite, name){
+const Tile = function(x, y, passable, spawn, checkpoint, death, name){
   this.x = x;
   this.y = y;
   this.passable = passable;
-  this.sprite = sprite;
+  this.isSpawn = spawn;
+  this.isCheckpoint = checkpoint;
+  this.isDeath = death;
   this.name = name;
+
   this.getX = function() {
     return this.x;
   };
@@ -37,13 +40,21 @@ const tileSize = 50;
 var parser = function(array){
   var arr = [];
   var temp = [];
+  var passable, spawn, checkpoint, death, name;
   for (var y = 0; y < array.length; y++){
     for (var x = 0; x < array[y].length; x++){
-      if (array[y][x] == "S"){
-        temp.push(new Tile(x*tileSize, y*tileSize, true, "cool", "sky"));
+      passable = false;
+      spawn = false;
+      checkpoint= false;
+      death = false;
+      if (array[y][x].includes("0")) spawn = true;
+      else if (array[y][x].includes("C")) checkpoint = true;
+      if (array[y][x].includes("S")){
+        passable = true;
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, "sky"));
       }
-      if (array[y][x] == "G"){
-        temp.push(new Tile(x*tileSize, y*tileSize, false, "cool", "ground"));
+      else if (array[y][x].includes("G")) {
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, "ground"));
       }
     }
     arr.push(temp);

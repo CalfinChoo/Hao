@@ -2,12 +2,28 @@ const Game = function(controller, time_step) {
   this.mode = 0;
 
   this.level = test;
+  this.levelInfo = {
+    'spawn': [],
+    'checkpoints': []
+  };
+  this.findLevelInfo = function() {
+    this.levelInfo['spawn'] = [];
+    this.levelInfo['checkpoints'] = [];
+    for (var y = 0; y < this.level.length; y++) {
+      for (var x = 0; x < this.level[y].length; x++) {
+        if (this.level[y][x].isSpawn) this.levelInfo['spawn'] = [this.level[y][x].getX(), this.level[y][x].getY()];
+        else if (this.level[y][x].isCheckpoint) this.levelInfo['checkpoints'].push([this.level[y][x].getX(), this.level[y][x].getY()]);
+      }
+    }
+  };
+  this.findLevelInfo();
+
   this.time_step = time_step;
   this.worldYAccel = 30;
   this.worldLeftBorder = 0;
   this.worldRightBorder = this.level[0].length * tileSize;
   this.worldTopBorder = 0;
-  this.worldBottomBorder = 600;
+  this.worldBottomBorder = this.level.length * tileSize;
 
   this.controller = controller;
   this.isLeft = this.controller.left.input;
@@ -67,7 +83,8 @@ const Game = function(controller, time_step) {
     temp = [];
     return dict;
   };
-  this.player = new Player(3, this.initializePlayerSprites(), 50, 250, this.level);
+
+  this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.level);
 
   this.yTickCount = 0;
   this.xTickCount = 0;
@@ -327,9 +344,7 @@ const Game = function(controller, time_step) {
   };
 };
 
-const Player = function(health, sprites, x, y, level) {
-  this.maxHealth = health;
-  this.currentHealth = health;
+const Player = function(sprites, x, y, level) {
   this.x = x;
   this.y = y;
   this.onGround = false;
