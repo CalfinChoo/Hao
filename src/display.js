@@ -38,7 +38,7 @@ const Display = function(cavnas) {
     if (playerX > this.viewBorderLeft && playerX < this.viewBorderLeft + this.xOffset) {
       this.xOffset += playerX - (this.viewBorderLeft + this.xOffset);
     }
-    else if (playerX > this.viewBorderRight + this.xOffset) {
+    else if (game.player.x < game.worldRightBorder - (this.canvas.width - this.viewBorderRight) && playerX > this.viewBorderRight + this.xOffset) {
       this.xOffset += playerX - (this.viewBorderRight + this.xOffset);
     }
     if (this.xOffset > 0) {

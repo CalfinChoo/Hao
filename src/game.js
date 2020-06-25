@@ -5,7 +5,7 @@ const Game = function(controller, time_step) {
   this.time_step = time_step;
   this.worldYAccel = 30;
   this.worldLeftBorder = 0;
-  this.worldRightBorder = 1000;
+  this.worldRightBorder = this.level[0].length * tileSize;
   this.worldTopBorder = 0;
   this.worldBottomBorder = 600;
 
