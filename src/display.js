@@ -1,15 +1,15 @@
 const Display = function(cavnas) {
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
-
-  this.viewBorderLeft = 250;
-  this.viewBorderRight = 300;
-  this.viewBorderTop = 200;
-  this.viewBorderBottom = 260;
+  this.viewBorderLeft = Math.round(this.canvas.width / 2.4);
+  this.viewBorderRight = this.canvas.width / 2;
+  this.viewBorderTop = this.canvas.height /3;
+  this.viewBorderBottom = this.canvas.height * 1/2;
   this.xOffset = 0;
   this.yOffset = 0;
   this.positions = [];
   this.motionTrailLength = 15;
+  console.log(this.viewBorderBottom);
 
   this.img;
   this.parseLevel = function(arr) {
@@ -45,13 +45,13 @@ const Display = function(cavnas) {
       playerX -= this.xOffset;
     }
     if (game.player.y < this.viewBorderTop) this.yOffset = 0;
-    if (playerY < this.viewBorderTop + this.yOffset && playerY > this.viewBorderTop + this.yOffset) {
+    if (playerY > this.viewBorderTop && playerY < this.viewBorderTop + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderTop + this.yOffset);
     }
     else if (playerY > this.viewBorderBottom + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderBottom + this.yOffset);
     }
-    if (this.yOffset < 0) {
+    if (this.yOffset > 0) {
       playerY -= this.yOffset;
     }
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
