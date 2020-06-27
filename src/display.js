@@ -9,7 +9,6 @@ const Display = function(cavnas) {
   this.yOffset = 0;
   this.positions = [];
   this.motionTrailLength = 15;
-  console.log(this.viewBorderBottom);
 
   this.img;
   this.parseLevel = function(arr) {
@@ -25,6 +24,11 @@ const Display = function(cavnas) {
           this.img.src = "assets/grass.png";
           this.ctx.drawImage(this.img, 0, 0, 400, 400, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
           // this.ctx.fillRect(arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
+        }
+        if (arr[x][y].isDeath){
+          this.img = new Image();
+          this.img.src = "assets/spike.png";
+          this.ctx.drawImage(this.img, 0, 0, 50, 50, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
         }
       }
     }
@@ -56,10 +60,10 @@ const Display = function(cavnas) {
     }
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(test);
-    this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
+    // this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
-    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall) {
+    if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall && !game.player.isDying) {
       for (var i = 0; i < this.positions.length; i++) {
         this.ctx.save();
         var ratio = (i + 1) / this.positions.length;
