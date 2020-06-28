@@ -348,6 +348,8 @@ const Game = function(controller, time_step) {
       if (this.xTickCounterOn) this.xTickCount += 1;
       else this.xTickCount = 0;
       if (this.player.xVel == 0) this.xTickCounterOn = false;
+
+      this.player.activateCheckpoint();
     }
 
     //////////////////////
@@ -500,6 +502,19 @@ const Player = function(sprites, x, y, level) {
       for (var x = 0; x < this.level[y].length; x++) {
           if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX()+tileSize)||(this.x+this.width > this.level[y][x].getX() && this.x+this.width <= this.level[y][x].getX()+tileSize)) && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())
           if (this.level[y][x].getDeath()) return true;
+        }
+      }
+    return false;
+  };
+  this.activateCheckpoint = function() {
+    for (var y = 0; y < this.level.length; y++) {
+      for (var x = 0; x < this.level[y].length; x++) {
+          if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX()+tileSize)||(this.x+this.width > this.level[y][x].getX() && this.x+this.width <= this.level[y][x].getX()+tileSize)) && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())
+          if (this.level[y][x].getCheckpoint() && !this.level[y][x].getTriggered()) {
+            this.checkpoint = [this.level[y][x].getX(), this.level[y][x].getY() - tileSize];
+            this.level[y][x].setTriggered(true);
+            break;
+          }
         }
       }
     return false;

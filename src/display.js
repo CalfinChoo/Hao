@@ -18,17 +18,21 @@ const Display = function(cavnas) {
           this.ctx.fillStyle = "#87ceeb";
           this.ctx.fillRect(arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
         }
-        if (arr[x][y].name=="ground"){
-          this.ctx.fillStyle = "#D2691E";
+        else {
           this.img = new Image();
-          this.img.src = "assets/grass.png";
-          this.ctx.drawImage(this.img, 0, 0, 400, 400, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
-          // this.ctx.fillRect(arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
+          this.img.src = arr[x][y].sprite;
+          this.ctx.drawImage(this.img, 0, 0, 64, 64, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
         }
-        if (arr[x][y].isDeath){
+        if (arr[x][y].getDeath()){
           this.img = new Image();
           this.img.src = "assets/spike.png";
           this.ctx.drawImage(this.img, 0, 0, 50, 50, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
+        }
+        else if (arr[x][y].getCheckpoint()) {
+          this.img = new Image();
+          if (arr[x][y].getTriggered()) this.img.src = "assets/torch_on.png";
+          else this.img.src = "assets/torch.png";
+          this.ctx.drawImage(this.img, 0, 0, 64, 64, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
         }
       }
     }
