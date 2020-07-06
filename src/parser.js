@@ -2,17 +2,17 @@ var arrays =
 [ ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
   ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
   ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
   ["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
   ["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
   ["S","S","S","S","S","SC","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","G","SD","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S0","S","S","S","G","SD","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","SD","S"],
-  ["S","S","S","S","S","G","SD","S","S","S","S","S","S","SC","S","S","S","S","S","S","S","S","S","S","S"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G"] ];
+  ["S","S","S","S","S","L","SD","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S0","S","S","S","L","SD","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","SD","S"],
+  ["S","S","S","S","S","L","SD","S","S","S","S","S","S","SC","S","S","S","S","S","S","S","S","S","S","S"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","S","S","S","G","G","G","G","G","G"],
+  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","S","S","S","I","I","I","I","I","I"],
+  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I"],
+  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I"] ];
 
 
 
@@ -76,6 +76,176 @@ var parser = function(array){
       else if (array[y][x].includes("G")) {
         name = "grass";
         sprite = "assets/grass.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("I")) {
+        name = "dirt";
+        sprite = "assets/dirt.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("L")) {
+        name = "log";
+        sprite = "assets/log_oak.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("V")) {
+        name = "leaves";
+        sprite = "assets/leaves_oak_opaque.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("B")) {
+        name = "bedrock";
+        sprite = "assets/bedrock.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("R")) {
+        name = "brick";
+        sprite = "assets/brick.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("O")) {
+        name = "cobblestone";
+        sprite = "assets/cobblestone.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("M")) {
+        name = "cobblestone_mossy";
+        sprite = "assets/cobblestone_mossy.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("A")) {
+        name = "daylight_detector";
+        sprite = "assets/daylight_detector_top.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("P")) {
+        name = "podzol";
+        sprite = "assets/dirt_podzol_side.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("E")) {
+        name = "emerald";
+        sprite = "assets/emerald_block.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z1")) {
+        name = "glass";
+        sprite = "assets/glass.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z2")) {
+        name = "glass_black";
+        sprite = "assets/glass_black.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z3")) {
+        name = "glass_blue";
+        sprite = "assets/glass_blue.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z4")) {
+        name = "glass_brown";
+        sprite = "assets/glass_brown.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z5")) {
+        name = "glass_cyan";
+        sprite = "assets/glass_cyan.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z6")) {
+        name = "glass_gray";
+        sprite = "assets/glass_gray.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z7")) {
+        name = "glass_green";
+        sprite = "assets/glass_green.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z8")) {
+        name = "glass_light_blue";
+        sprite = "assets/glass_light_blue.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Z9")) {
+        name = "glass_lime";
+        sprite = "assets/glass_lime.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("1Z")) {
+        name = "glass_magenta";
+        sprite = "assets/glass_magenta.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("2Z")) {
+        name = "glass_orange";
+        sprite = "assets/glass_orange.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("3Z")) {
+        name = "glass_pink";
+        sprite = "assets/glass_pink.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("4Z")) {
+        name = "glass_purple";
+        sprite = "assets/glass_purple.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("5Z")) {
+        name = "glass_red";
+        sprite = "assets/glass_red.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("6Z")) {
+        name = "glass_silver";
+        sprite = "assets/glass_silver.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("7Z")) {
+        name = "glass_white";
+        sprite = "assets/glass_white.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("8Z")) {
+        name = "glass_yellow";
+        sprite = "assets/glass_yellow.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("N")) {
+        name = "snow";
+        sprite = "assets/grass_side_snowed.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("Y")) {
+        name = "mycelium";
+        sprite = "assets/mycelium_side.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("T")) {
+        name = "stone";
+        sprite = "assets/stone.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("K1")) {
+        name = "stonebrick";
+        sprite = "assets/stonebrick.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("K2")) {
+        name = "stonebrick_cracked";
+        sprite = "assets/stonebrick_cracked.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("K3")) {
+        name = "stonebrick_mossy";
+        sprite = "assets/stonebrick_mossy.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("X")) {
+        name = "tnt";
+        sprite = "assets/tnt_side.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
     }

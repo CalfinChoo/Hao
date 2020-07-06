@@ -1,6 +1,4 @@
 const Game = function(controller, time_step) {
-  this.mode = 0;
-
   this.level = test;
   this.levelInfo = {
     'spawn': [],
@@ -374,7 +372,7 @@ const Player = function(sprites, x, y, level) {
   this.onGround = false;
 
   this.width = 45;
-  this.height = 87;
+  this.height = 85;
 
   this.hasDash = true;
   this.dashVel = 150;

@@ -4,7 +4,7 @@ const Display = function(cavnas) {
   this.viewBorderLeft = Math.round(this.canvas.width / 2.4);
   this.viewBorderRight = this.canvas.width / 2;
   this.viewBorderTop = this.canvas.height /3;
-  this.viewBorderBottom = this.canvas.height * 1/2;
+  this.viewBorderBottom = Math.round(this.canvas.height / 2);
   this.xOffset = 0;
   this.yOffset = 0;
   this.positions = [];
@@ -58,6 +58,7 @@ const Display = function(cavnas) {
     }
     else if (playerY > this.viewBorderBottom + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderBottom + this.yOffset);
+      console.log("hi");
     }
     if (this.yOffset > 0) {
       playerY -= this.yOffset;
