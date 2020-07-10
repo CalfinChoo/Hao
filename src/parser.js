@@ -1,18 +1,22 @@
 var arrays =
-[ ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","G","S","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","S","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","SC","S","S","S","G","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S","S","S","S","L","SD","S","S","G","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
-  ["S","S0","S","S","S","L","SD","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","SD","S"],
-  ["S","S","S","S","S","L","SD","S","S","S","S","S","S","SC","S","S","S","S","S","S","S","S","S","S","S"],
-  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","S","S","S","G","G","G","G","G","G"],
-  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","S","S","S","I","I","I","I","I","I"],
-  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I"],
-  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I"] ];
+[ ["S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","S","F","F","F","F","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","S","F","F","F","F","F","F","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","F","F","F","F","F","F","F","F","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["F","F","F","F","F","F","F","F","F","F","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","L","O","O","O","O","O","O","L","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","L","O","O","O","O","O","O","L","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","L","O","O0","Z3","Z3","O","O","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","L","O","O","O","O","O","O","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["S","L","F","F","F","F","F","F","L","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S","S"],
+  ["G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","S","S","S","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","G","S","S","S","G","G","G","G","G","G"],
+  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","S","S","S","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","S","S","S","I","I","I","I","I","I"],
+  ["I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","I","S","S","S","I","I","I","I","I","I"],
+  ["T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T"],
+  ["T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T"],
+  ["T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T","T"],
+  ["B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B"],
+  ["B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B","B"] ];
 
 
 
@@ -89,6 +93,7 @@ var parser = function(array){
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("V")) {
+        passable = true;
         name = "leaves";
         sprite = "assets/leaves_oak_opaque.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
@@ -104,6 +109,7 @@ var parser = function(array){
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("O")) {
+        passable = true;
         name = "cobblestone";
         sprite = "assets/cobblestone.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
@@ -129,86 +135,103 @@ var parser = function(array){
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z1")) {
+        passable = true;
         name = "glass";
         sprite = "assets/glass.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z2")) {
+        passable = true;
         name = "glass_black";
         sprite = "assets/glass_black.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z3")) {
+        passable = true;
         name = "glass_blue";
         sprite = "assets/glass_blue.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z4")) {
+        passable = true;
         name = "glass_brown";
         sprite = "assets/glass_brown.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z5")) {
+        passable = true;
         name = "glass_cyan";
         sprite = "assets/glass_cyan.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z6")) {
+        passable = true;
         name = "glass_gray";
         sprite = "assets/glass_gray.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z7")) {
+        passable = true;
         name = "glass_green";
         sprite = "assets/glass_green.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z8")) {
+        passable = true;
         name = "glass_light_blue";
         sprite = "assets/glass_light_blue.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("Z9")) {
+        passable = true;
         name = "glass_lime";
         sprite = "assets/glass_lime.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("1Z")) {
+        passable = true;
         name = "glass_magenta";
         sprite = "assets/glass_magenta.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("2Z")) {
+        passable = true;
         name = "glass_orange";
         sprite = "assets/glass_orange.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("3Z")) {
+        passable = true;
         name = "glass_pink";
         sprite = "assets/glass_pink.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("4Z")) {
+        passable = true;
         name = "glass_purple";
         sprite = "assets/glass_purple.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("5Z")) {
+        passable = true;
         name = "glass_red";
         sprite = "assets/glass_red.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("6Z")) {
+        passable = true;
         name = "glass_silver";
         sprite = "assets/glass_silver.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("7Z")) {
+        passable = true;
         name = "glass_white";
         sprite = "assets/glass_white.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
       else if (array[y][x].includes("8Z")) {
+        passable = true;
         name = "glass_yellow";
         sprite = "assets/glass_yellow.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
@@ -246,6 +269,11 @@ var parser = function(array){
       else if (array[y][x].includes("X")) {
         name = "tnt";
         sprite = "assets/tnt_side.png";
+        temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
+      }
+      else if (array[y][x].includes("F")) {
+        name = "planks_oak";
+        sprite = "assets/planks_oak.png";
         temp.push(new Tile(x*tileSize, y*tileSize, passable, spawn, checkpoint, death, name, sprite, size));
       }
     }

@@ -240,7 +240,7 @@ const Game = function(controller, time_step) {
           this.player.xVel = -1* this.player.dashVel/1.125;
         }
       }
-
+      console.log("hi");
       ///////////////////////////
       /// Player acceleration ///
       ///////////////////////////
@@ -405,14 +405,14 @@ const Player = function(sprites, x, y, level) {
       height: 90,
       image: this.spritesheets[key][0],
       image_noDash: this.spritesheets[key][1],
-      ticksPerFrame: 32,
+      ticksPerFrame: 16, //32
       loop: true,
       numberOfFrames: this.spriteFrames[key]
     });
-    if (key.localeCompare("walk") == 0) s.ticksPerFrame = 18;
-    else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 18; s.loop = false;}
-    else if (key.localeCompare("climb") == 0) {s.ticksPerFrame = 16; s.tickCountOn = false;}
-    else if (key.localeCompare("death") == 0) {s.ticksPerFrame = 10; s.loop = false; s.width = 120; s.height = 120;}
+    if (key.localeCompare("walk") == 0) s.ticksPerFrame = 9; //18
+    else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 9; s.loop = false;} //18
+    else if (key.localeCompare("climb") == 0) {s.ticksPerFrame = 8; s.tickCountOn = false;} //16
+    else if (key.localeCompare("death") == 0) {s.ticksPerFrame = 5; s.loop = false; s.width = 120; s.height = 120;} //10
     this.sprites[key] = s;
   }
 
