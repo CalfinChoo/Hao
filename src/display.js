@@ -58,13 +58,12 @@ const Display = function(cavnas) {
     }
     else if (playerY > this.viewBorderBottom + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderBottom + this.yOffset);
-      console.log("hi");
     }
     if (this.yOffset > 0) {
       playerY -= this.yOffset;
     }
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.parseLevel(test);
+    this.parseLevel(game.levels[game.level]);
     // this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);

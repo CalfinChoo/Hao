@@ -1,5 +1,6 @@
 const Game = function(controller, time_step) {
-  this.level = test;
+  this.levels = test;
+  this.level = 0;
   this.levelInfo = {
     'spawn': [],
     'checkpoints': []
@@ -7,10 +8,10 @@ const Game = function(controller, time_step) {
   this.findLevelInfo = function() {
     this.levelInfo['spawn'] = [];
     this.levelInfo['checkpoints'] = [];
-    for (var y = 0; y < this.level.length; y++) {
-      for (var x = 0; x < this.level[y].length; x++) {
-        if (this.level[y][x].isSpawn) this.levelInfo['spawn'] = [this.level[y][x].getX(), this.level[y][x].getY()];
-        else if (this.level[y][x].isCheckpoint) this.levelInfo['checkpoints'].push([this.level[y][x].getX(), this.level[y][x].getY()]);
+    for (var y = 0; y < this.levels[this.level].length; y++) {
+      for (var x = 0; x < this.levels[this.level][y].length; x++) {
+        if (this.levels[this.level][y][x].isSpawn) this.levelInfo['spawn'] = [this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()];
+        else if (this.levels[this.level][y][x].isCheckpoint) this.levelInfo['checkpoints'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
       }
     }
   };
@@ -19,9 +20,9 @@ const Game = function(controller, time_step) {
   this.time_step = time_step;
   this.worldYAccel = 30;
   this.worldLeftBorder = 0;
-  this.worldRightBorder = this.level[0].length * tileSize;
+  this.worldRightBorder = this.levels[this.level][0].length * tileSize;
   this.worldTopBorder = 0;
-  this.worldBottomBorder = this.level.length * tileSize;
+  this.worldBottomBorder = this.levels[this.level].length * tileSize;
 
   this.controller = controller;
   this.isLeft = this.controller.left.input;
@@ -90,7 +91,7 @@ const Game = function(controller, time_step) {
     return dict;
   };
 
-  this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.level);
+  this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
 
   this.yTickCount = 0;
   this.xTickCount = 0;
@@ -103,6 +104,15 @@ const Game = function(controller, time_step) {
   this.lastX;
 
   this.update = function() {
+    ///////////////////////
+    /// Level Detection ///
+    ///////////////////////
+    if (this.player.detectFinish()) {
+      this.level += 1;
+      this.findLevelInfo();
+      this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
+    }
+
     this.isLeft = this.controller.left.input;
     this.isRight = this.controller.right.input;
     this.isUp = this.controller.up.input;
@@ -240,7 +250,6 @@ const Game = function(controller, time_step) {
           this.player.xVel = -1* this.player.dashVel/1.125;
         }
       }
-      console.log("hi");
       ///////////////////////////
       /// Player acceleration ///
       ///////////////////////////
@@ -367,7 +376,7 @@ const Player = function(sprites, x, y, level) {
   this.xAccel = 0;
   this.xVel = 0;
   this.yVel = 0;
-  this.max_xVel = 10;
+  this.max_xVel = 7;
   this.max_yVel = 30;
   this.onGround = false;
 
@@ -513,6 +522,15 @@ const Player = function(sprites, x, y, level) {
             this.level[y][x].setTriggered(true);
             break;
           }
+        }
+      }
+    return false;
+  };
+  this.detectFinish = function() {
+    for (var y = 0; y < this.level.length; y++) {
+      for (var x = 0; x < this.level[y].length; x++) {
+          if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX()+tileSize)||(this.x+this.width > this.level[y][x].getX() && this.x+this.width <= this.level[y][x].getX()+tileSize)) && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())
+          if (this.level[y][x].getFinish()) {return true;}
         }
       }
     return false;

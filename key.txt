@@ -1,6 +1,7 @@
 0 = spawn
 C = checkpoint
 D = death
+- = finish
 
 S = sky
 G = grass
