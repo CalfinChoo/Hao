@@ -57,9 +57,10 @@ const Display = function(cavnas) {
     if (playerY > this.viewBorderTop && playerY < this.viewBorderTop + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderTop + this.yOffset);
     }
-    else if (playerY > this.viewBorderBottom + this.yOffset) {
+    else if (game.player.y < game.worldBottomBorder - (this.canvas.height - this.viewBorderBottom) && playerY > this.viewBorderBottom + this.yOffset) {
       this.yOffset += playerY - (this.viewBorderBottom + this.yOffset);
     }
+    else if (game.player.y > game.worldBottomBorder - (this.canvas.height - this.viewBorderBottom)) this.yOffset = game.worldBottomBorder - (this.canvas.height - this.viewBorderBottom) - this.viewBorderBottom;
     if (this.yOffset > 0) {
       playerY -= this.yOffset;
     }
