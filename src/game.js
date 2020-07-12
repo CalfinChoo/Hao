@@ -111,6 +111,8 @@ const Game = function(controller, time_step) {
       this.level += 1;
       this.findLevelInfo();
       this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
+      this.worldRightBorder = this.levels[this.level][0].length * tileSize;
+      this.worldBottomBorder = this.levels[this.level].length * tileSize;
     }
 
     this.isLeft = this.controller.left.input;

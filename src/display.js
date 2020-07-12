@@ -49,6 +49,7 @@ const Display = function(cavnas) {
     else if (game.player.x < game.worldRightBorder - (this.canvas.width - this.viewBorderRight) && playerX > this.viewBorderRight + this.xOffset) {
       this.xOffset += playerX - (this.viewBorderRight + this.xOffset);
     }
+    else if (game.player.x > game.worldRightBorder - (this.canvas.width - this.viewBorderRight)) this.xOffset = game.worldRightBorder - (this.canvas.width - this.viewBorderRight) - this.viewBorderRight;
     if (this.xOffset > 0) {
       playerX -= this.xOffset;
     }
@@ -62,9 +63,9 @@ const Display = function(cavnas) {
     if (this.yOffset > 0) {
       playerY -= this.yOffset;
     }
+    console.log(this.viewBorderRight);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(game.levels[game.level]);
-    // this.ctx.fillRect(playerX, playerY, game.player.width, game.player.height);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
     if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall && !game.player.isDying) {
