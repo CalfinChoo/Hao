@@ -2,6 +2,7 @@
 C = checkpoint
 D = death
 - = finish
+~ = message
 
 S = sky
 G = grass

@@ -1,6 +1,8 @@
 const Display = function(cavnas) {
   this.canvas = canvas;
   this.ctx = canvas.getContext('2d');
+  this.ctx.font = "bold 25pt Courier";
+  this.ctx.textAlign = "center";
   this.viewBorderLeft = Math.round(this.canvas.width / 2.4);
   this.viewBorderRight = Math.round(this.canvas.width / 2);
   this.viewBorderTop = Math.round(this.canvas.height /3);
@@ -39,6 +41,12 @@ const Display = function(cavnas) {
   };
   this.stockImg = new Image();
   this.stockImg.src = "assets/jump.png"
+  this.messages = [
+    "A+D to Move",
+    "Space to Jump",
+    "This is a",
+    "Checkpoint"
+  ];
 
   this.render = function(game) {
     var playerX = Math.round(game.player.x), playerY = Math.round(game.player.y);
@@ -64,9 +72,13 @@ const Display = function(cavnas) {
     if (this.yOffset > 0) {
       playerY -= this.yOffset;
     }
-    console.log(this.viewBorderRight);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.parseLevel(game.levels[game.level]);
+    this.ctx.fillStyle = "black";
+    for (var i = 0; i < game.levelInfo['messages'].length; i++) {
+      if (this.messages[i] == undefined) break;
+      this.ctx.fillText(this.messages[i], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
+    }
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
     if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall && !game.player.isDying) {

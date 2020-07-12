@@ -3,15 +3,22 @@ const Game = function(controller, time_step) {
   this.level = 0;
   this.levelInfo = {
     'spawn': [],
-    'checkpoints': []
+    'checkpoints': [],
+    'messages': []
   };
   this.findLevelInfo = function() {
     this.levelInfo['spawn'] = [];
     this.levelInfo['checkpoints'] = [];
+    this.levelInfo['messages'] = [];
     for (var y = 0; y < this.levels[this.level].length; y++) {
       for (var x = 0; x < this.levels[this.level][y].length; x++) {
-        if (this.levels[this.level][y][x].isSpawn) this.levelInfo['spawn'] = [this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()];
-        else if (this.levels[this.level][y][x].isCheckpoint) this.levelInfo['checkpoints'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
+        if (this.levels[this.level][y][x].getSpawn()) this.levelInfo['spawn'] = [this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()];
+        else if (this.levels[this.level][y][x].getCheckpoint()) this.levelInfo['checkpoints'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
+      }
+    }
+    for (var x = 0; x < this.levels[this.level][0].length; x++) {
+      for (var y = 0; y < this.levels[this.level].length; y++) {
+        if (this.levels[this.level][y][x].getMessage()) this.levelInfo['messages'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
       }
     }
   };
@@ -104,6 +111,7 @@ const Game = function(controller, time_step) {
   this.lastX;
 
   this.update = function() {
+    console.log(this.player.xVel);
     ///////////////////////
     /// Level Detection ///
     ///////////////////////
@@ -144,7 +152,7 @@ const Game = function(controller, time_step) {
       }
       else if (this.isRight && !this.player.isClimbing) {
         this.xTickCounterOn = true;
-        if (this.player.xVel < 0 && this.player.xVel > -1*this.player.max_xVel) this.player.xVel = 0;
+        if (this.player.xVel < 0 ) this.player.xVel = 0;
         this.player.xAccel = 50;
         if (!this.player.isRight)  this.xTickCount = 0;
         if (this.player.isJumping && this.xTickCount < this.time_step / 2) this.xTickCount = this.time_step / 2;
