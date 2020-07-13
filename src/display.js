@@ -10,7 +10,7 @@ const Display = function(cavnas) {
   this.xOffset = 0;
   this.yOffset = 0;
   this.positions = [];
-  this.motionTrailLength = 15;
+  this.motionTrailLength = 10;
 
   this.img;
   this.parseLevel = function(arr) {
@@ -45,7 +45,9 @@ const Display = function(cavnas) {
     "A+D to Move",
     "Space to Jump",
     "This is a",
-    "Checkpoint"
+    "Checkpoint",
+    "xd",
+    "test"
   ];
 
   this.render = function(game) {
@@ -77,7 +79,7 @@ const Display = function(cavnas) {
     this.ctx.fillStyle = "black";
     for (var i = 0; i < game.levelInfo['messages'].length; i++) {
       if (this.messages[i] == undefined) break;
-      this.ctx.fillText(this.messages[i], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
+      this.ctx.fillText(this.messages[i + game.messageStartIndex], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
     }
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);

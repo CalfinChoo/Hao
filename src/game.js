@@ -6,6 +6,8 @@ const Game = function(controller, time_step) {
     'checkpoints': [],
     'messages': []
   };
+  this.messageStartIndex = 0;
+  this.messageCount = 0;
   this.findLevelInfo = function() {
     this.levelInfo['spawn'] = [];
     this.levelInfo['checkpoints'] = [];
@@ -18,7 +20,10 @@ const Game = function(controller, time_step) {
     }
     for (var x = 0; x < this.levels[this.level][0].length; x++) {
       for (var y = 0; y < this.levels[this.level].length; y++) {
-        if (this.levels[this.level][y][x].getMessage()) this.levelInfo['messages'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
+        if (this.levels[this.level][y][x].getMessage()) {
+          this.levelInfo['messages'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
+          this.messageCount += 1;
+        }
       }
     }
   };
@@ -111,7 +116,6 @@ const Game = function(controller, time_step) {
   this.lastX;
 
   this.update = function() {
-    console.log(this.player.xVel);
     ///////////////////////
     /// Level Detection ///
     ///////////////////////
@@ -121,6 +125,7 @@ const Game = function(controller, time_step) {
       this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
       this.worldRightBorder = this.levels[this.level][0].length * tileSize;
       this.worldBottomBorder = this.levels[this.level].length * tileSize;
+      this.messageStartIndex = this.messageCount-1;
     }
 
     this.isLeft = this.controller.left.input;
