@@ -142,7 +142,7 @@ const Game = function(controller, time_step) {
     ///////////////////////
     if (this.player.detectDeath()) {
       this.player.isDying = true;
-      if (this.player.sprites['death'].frameIndex == 7) this.player = new Player(this.initializePlayerSprites(), this.player.checkpoint[0], this.player.checkpoint[1], this.level);
+      if (this.player.sprites['death'].frameIndex == 7) this.player = new Player(this.initializePlayerSprites(), this.player.checkpoint[0], this.player.checkpoint[1], this.levels[this.level]);
     }
     else {
       if (this.isLeft && !this.player.isClimbing) {
@@ -297,6 +297,7 @@ const Game = function(controller, time_step) {
           this.yTickCount = 0;
         }
         else {
+          this.player.canClimb = false;
           this.yTickCounterOn = true;
           if (this.player.yVel > this.player.max_yVel) {
             this.player.yVel += this.player.dashAccel;
@@ -436,7 +437,7 @@ const Player = function(sprites, x, y, level) {
     if (key.localeCompare("walk") == 0) s.ticksPerFrame = 9; //18
     else if (key.localeCompare("jump") == 0) {s.ticksPerFrame = 9; s.loop = false;} //18
     else if (key.localeCompare("climb") == 0) {s.ticksPerFrame = 8; s.tickCountOn = false;} //16
-    else if (key.localeCompare("death") == 0) {s.ticksPerFrame = 5; s.loop = false; s.width = 120; s.height = 120;} //10
+    else if (key.localeCompare("death") == 0) {s.ticksPerFrame = 4; s.loop = false; s.width = 120; s.height = 120;} //10
     this.sprites[key] = s;
   }
 

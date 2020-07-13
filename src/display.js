@@ -36,6 +36,11 @@ const Display = function(cavnas) {
           else this.img.src = "assets/torch.png";
           this.ctx.drawImage(this.img, 0, 0, 64, 64, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
         }
+        if (arr[x][y].getFinish()) {
+          this.img = new Image();
+          this.img.src = "assets/beacon.png";
+          this.ctx.drawImage(this.img, 0, 0, 64, 64, arr[x][y].x-this.xOffset, arr[x][y].y-this.yOffset, tileSize, tileSize);
+        }
       }
     }
   };
@@ -46,8 +51,17 @@ const Display = function(cavnas) {
     "Space to Jump",
     "This is a",
     "Checkpoint",
-    "xd",
-    "test"
+    ">>>",
+    "Shift+W/S",
+    "to Climb",
+    "Space+A/D",
+    "to Wall",
+    "Jump",
+    "K+WASD",
+    "to Dash",
+    "This is",
+    "the Finish",
+    ">>>"
   ];
 
   this.render = function(game) {
