@@ -39,5 +39,6 @@ T = stone
 K1 = stonebrick
 K2 = stonebrick_cracked
 K3 = stonebrick_mossy
+K4 = stonebrick_carved
 X = tnt
 F = oak_planks

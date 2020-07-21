@@ -92,7 +92,8 @@ const Display = function(cavnas) {
     this.parseLevel(game.levels[game.level]);
     this.ctx.fillStyle = "black";
     for (var i = 0; i < game.levelInfo['messages'].length; i++) {
-      if (this.messages[i] == undefined) break;
+      console.log(game.messageStartIndex);
+      if (this.messages[i+ game.messageStartIndex] == undefined) break;
       this.ctx.fillText(this.messages[i + game.messageStartIndex], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
     }
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);

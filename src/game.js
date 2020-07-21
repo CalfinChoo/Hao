@@ -14,8 +14,8 @@ const Game = function(controller, time_step) {
     this.levelInfo['messages'] = [];
     for (var y = 0; y < this.levels[this.level].length; y++) {
       for (var x = 0; x < this.levels[this.level][y].length; x++) {
-        if (this.levels[this.level][y][x].getSpawn()) this.levelInfo['spawn'] = [this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()];
-        else if (this.levels[this.level][y][x].getCheckpoint()) this.levelInfo['checkpoints'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()]);
+        if (this.levels[this.level][y][x].getSpawn()) this.levelInfo['spawn'] = [this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()+.1];
+        else if (this.levels[this.level][y][x].getCheckpoint()) this.levelInfo['checkpoints'].push([this.levels[this.level][y][x].getX(), this.levels[this.level][y][x].getY()+.1]);
       }
     }
     for (var x = 0; x < this.levels[this.level][0].length; x++) {
@@ -121,11 +121,11 @@ const Game = function(controller, time_step) {
     ///////////////////////
     if (this.player.detectFinish()) {
       this.level += 1;
+      if (this.messageCount > 0) this.messageStartIndex = this.messageCount-1;
       this.findLevelInfo();
       this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
       this.worldRightBorder = this.levels[this.level][0].length * tileSize;
       this.worldBottomBorder = this.levels[this.level].length * tileSize;
-      this.messageStartIndex = this.messageCount-1;
     }
 
     this.isLeft = this.controller.left.input;
@@ -225,13 +225,13 @@ const Game = function(controller, time_step) {
         this.player.hasDash = false;
         if (this.isUp && this.isRight) {
           this.player.xVel = Math.cos(Math.PI / 4) * this.player.dashVel;
-          this.player.yVel = -1 * Math.sin(Math.PI / 4) * this.player.dashVel;
+          this.player.yVel = -1.1 * Math.sin(Math.PI / 4) * this.player.dashVel;
           this.yTickCounterOn = true;
           this.yTickCount = this.time_step / 2;
         }
         else if (this.isUp && this.isLeft) {
           this.player.xVel = Math.cos(3 * Math.PI / 4) * this.player.dashVel;
-          this.player.yVel = -1 * Math.sin(3 * Math.PI / 4) * this.player.dashVel;
+          this.player.yVel = -1.1 * Math.sin(3 * Math.PI / 4) * this.player.dashVel;
           this.yTickCounterOn = true;
           this.yTickCount = this.time_step / 2;
         }
@@ -534,7 +534,7 @@ const Player = function(sprites, x, y, level) {
       for (var x = 0; x < this.level[y].length; x++) {
           if (((this.x >= this.level[y][x].getX() && this.x < this.level[y][x].getX()+tileSize)||(this.x+this.width > this.level[y][x].getX() && this.x+this.width <= this.level[y][x].getX()+tileSize)) && this.y <= this.level[y][x].getY() + tileSize && this.y + this.height > this.level[y][x].getY())
           if (this.level[y][x].getCheckpoint() && !this.level[y][x].getTriggered()) {
-            this.checkpoint = [this.level[y][x].getX(), this.level[y][x].getY() - tileSize];
+            this.checkpoint = [this.level[y][x].getX(), this.level[y][x].getY() - tileSize +.1];
             this.level[y][x].setTriggered(true);
             break;
           }
