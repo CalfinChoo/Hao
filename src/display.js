@@ -61,7 +61,12 @@ const Display = function(cavnas) {
     "to Dash",
     "This is",
     "the Finish",
-    ">>>"
+    ">>>",
+    "Wall Dash",
+    "effectively",
+    "by letting",
+    "go of the",
+    "wall first!"
   ];
 
   this.render = function(game) {
@@ -92,7 +97,7 @@ const Display = function(cavnas) {
     this.parseLevel(game.levels[game.level]);
     this.ctx.fillStyle = "black";
     for (var i = 0; i < game.levelInfo['messages'].length; i++) {
-      console.log(game.messageStartIndex);
+      // console.log(game.messageStartIndex);
       if (this.messages[i+ game.messageStartIndex] == undefined) break;
       this.ctx.fillText(this.messages[i + game.messageStartIndex], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
     }
