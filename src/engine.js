@@ -1,6 +1,5 @@
 const Engine = function(time_step, update, render) {
   this.animation_frame_request = undefined,
-  this.time = undefined,
   this.accumulated_time = 0,
   this.time_step = time_step,
   this.updated = false;

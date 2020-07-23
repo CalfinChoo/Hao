@@ -6,6 +6,7 @@ const Game = function(controller, time_step) {
     'checkpoints': [],
     'messages': []
   };
+  this.deaths = 0;
   this.messageStartIndex = 0;
   this.messageCount = 0;
   this.findLevelInfo = function() {
@@ -116,11 +117,13 @@ const Game = function(controller, time_step) {
   this.lastX;
 
   this.update = function() {
+    if (this.level > this.levels.length) return;
     ///////////////////////
     /// Level Detection ///
     ///////////////////////
     if (this.player.detectFinish()) {
       this.level += 1;
+      if (this.level >= this.levels.length) return;
       if (this.messageCount > 0) this.messageStartIndex = this.messageCount;
       this.findLevelInfo();
       this.player = new Player(this.initializePlayerSprites(), this.levelInfo.spawn[0], this.levelInfo.spawn[1], this.levels[this.level]);
@@ -142,7 +145,10 @@ const Game = function(controller, time_step) {
     ///////////////////////
     if (this.player.detectDeath()) {
       this.player.isDying = true;
-      if (this.player.sprites['death'].frameIndex == 7) this.player = new Player(this.initializePlayerSprites(), this.player.checkpoint[0], this.player.checkpoint[1], this.levels[this.level]);
+      if (this.player.sprites['death'].frameIndex == 7) {
+        this.deaths += 1;
+        this.player = new Player(this.initializePlayerSprites(), this.player.checkpoint[0], this.player.checkpoint[1], this.levels[this.level]);
+      }
     }
     else {
       if (this.isLeft && !this.player.isClimbing) {

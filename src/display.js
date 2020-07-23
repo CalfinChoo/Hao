@@ -12,6 +12,20 @@ const Display = function(cavnas) {
   this.positions = [];
   this.motionTrailLength = 10;
 
+  var s = Date.now();
+  var time = 0;
+  var min = 0;
+  var sec = 0;
+  setInterval(function() {
+      var d = Date.now() - s; // milliseconds elapsed since start
+      time = Math.floor(d / 1000); // in seconds
+      if (time % 60 == 0) {
+        min += 1;
+        sec = 0;
+      }
+      else sec += 1;
+  }, 1000); // update about every second
+
   this.img;
   this.parseLevel = function(arr) {
     for (var x = 0; x < arr.length; x++){
@@ -66,10 +80,34 @@ const Display = function(cavnas) {
     "effectively",
     "by letting",
     "go of the",
-    "wall first!"
+    "wall first!",
+    "A horizontal dash",
+    "will cancel",
+    "vertical momentum!",
   ];
 
   this.render = function(game) {
+    if (game.level >= game.levels.length) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.beginPath();
+      this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.fillStyle = "black";
+      this.ctx.fill();
+      this.ctx.fillStyle = "white";
+      this.endMessages =
+      ["Congratulations!",
+        "You Made It To The End!",
+        "",
+        "Deaths: " + game.deaths,
+        this.timeString,
+        "",
+        "Refresh the page to play again!"
+      ];
+      for (var i = 0; i < this.endMessages.length; i++) {
+        this.ctx.fillText(this.endMessages[i], this.canvas.width / 2, 75 + 75*i);
+      }
+      return;
+    }
     var playerX = Math.round(game.player.x), playerY = Math.round(game.player.y);
     if (game.player.x < this.viewBorderLeft) this.xOffset = 0;
     if (playerX > this.viewBorderLeft && playerX < this.viewBorderLeft + this.xOffset) {
@@ -101,6 +139,13 @@ const Display = function(cavnas) {
       if (this.messages[i+ game.messageStartIndex] == undefined) break;
       this.ctx.fillText(this.messages[i + game.messageStartIndex], game.levelInfo['messages'][i][0] - this.xOffset, game.levelInfo['messages'][i][1] - this.yOffset + tileSize/2);
     }
+    this.ctx.fillText("Deaths: " + game.deaths, 100, 40);
+    this.timeString = "Time: ";
+    if (min < 10) this.timeString += "0" + min + ":";
+    else this.timeString += min + ":";
+    if (sec < 10) this.timeString += "0" + sec;
+    else this.timeString += sec;
+    this.ctx.fillText(this.timeString, this.canvas.width - 140, 40);
     this.renderSprite(game.player.sprites[game.player.status], playerX, playerY, game.player.isRight, game.player.hasDash);
     this.storeLastPosition(playerX, playerY, this.xOffset, this.yOffset);
     if ((game.player.xVel > game.player.max_xVel || game.player.xVel < -1*game.player.max_xVel || game.player.yVel > game.player.max_yVel || game.player.yVel < -1*game.player.max_yVel) && !game.player.hasDash && !game.player.touchedWall && !game.player.isDying) {
