@@ -1,4 +1,5 @@
 # Hao's Platforming Journey
+Open up index.html to play.<br><br>
 This one is for you buddy.
 
 ## Leaderboard
