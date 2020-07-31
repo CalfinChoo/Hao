@@ -7,3 +7,4 @@ Feel free to add to it!
 | Name        | Deaths           | Time  |
 | ------------- |:-------------:| -----:|
 | Calvin      | 11 | 2:55 |
+| Ali         | 58 | 11:50|
