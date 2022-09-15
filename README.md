@@ -1,5 +1,8 @@
 # Hao's Platforming Journey
-Open up index.html to play.<br><br>
+Visit: https://keen-malabi-b8ebfc.netlify.app/
+<br><br>OR<br><br>
+Clone the repo and open up index.html to play.
+<br><br>
 "This one is for you buddy."
 
 ## Creator Leaderboard
