@@ -1,8 +1,5 @@
 document.getElementById("app").innerHTML = `
-<h1>Haoran's Platforming Journey</h1>
-<div>
-AKA (不)好的平台游戏
-</div>
+<h1>Hao's Platforming Journey</h1>
 `;
 
 window.addEventListener("load", function(e) {
